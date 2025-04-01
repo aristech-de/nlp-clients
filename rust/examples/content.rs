@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     )
     .await?;
     for response in responses {
-        println!("{:?}", response.item);
+        println!("{:?}", response.items);
     }
 
     // Update content:

@@ -14,7 +14,7 @@ use std::error::Error;
 use nlp_service::nlp_server_client::NlpServerClient;
 use nlp_service::{
     Function, FunctionRequest, GetContentRequest, GetContentResponse, GetIntentsRequest,
-    GetProjectsRequest, GetScoreLimitsRequest, GetScoreLimitsResponse, Intent, Project,
+    GetIntentsResponse, GetProjectsRequest, GetScoreLimitsRequest, GetScoreLimitsResponse, Project,
     RemoveContentRequest, RemoveContentResponse, RunFunctionsRequest, RunFunctionsResponse,
     UpdateContentRequest, UpdateContentResponse,
 };
@@ -197,15 +197,15 @@ pub async fn list_functions(
 ///         ],
 ///        ..ProcessRawRequest::default()
 ///     };
-///     let response = process(&mut client, request).await?;
+///     let response = run_functions(&mut client, request).await?;
 ///     println!("{}", response.output);
 ///     Ok(())
 /// }
-pub async fn process(
+pub async fn run_functions(
     client: &mut NlpClient,
     request: RunFunctionsRequest,
 ) -> Result<RunFunctionsResponse, Box<dyn Error>> {
-    let response = client.process(request).await?;
+    let response = client.run_functions(request).await?;
     Ok(response.into_inner())
 }
 
@@ -270,7 +270,7 @@ pub async fn list_projects(
 pub async fn get_intents(
     client: &mut NlpClient,
     request: GetIntentsRequest,
-) -> Result<Vec<Intent>, Box<dyn Error>> {
+) -> Result<Vec<GetIntentsResponse>, Box<dyn Error>> {
     let response = client.get_intents(request).await?;
     let mut stream = response.into_inner();
     let mut intents = vec![];

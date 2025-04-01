@@ -5,7 +5,7 @@ use utils::get_tls_options;
 use aristech_nlp_client::{
     get_client,
     nlp_service::{Function, RunFunctionsRequest},
-    process,
+    run_functions,
 };
 
 #[tokio::main]
@@ -17,7 +17,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let tls_options = get_tls_options()?;
     let mut client = get_client(host, tls_options).await?;
 
-    let response = process(
+    let response = run_functions(
         &mut client,
         RunFunctionsRequest {
             input: "hello world".to_string(),

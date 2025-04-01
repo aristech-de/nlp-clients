@@ -17,11 +17,15 @@ license = "MIT"
 categories = ["api-bindings"]
 
 [dependencies]
-tonic = { version = "0.12.3", features = ["tls", "tls-native-roots", "gzip"] }
-tokio = { version = "1.42.0", features = ["macros", "rt-multi-thread"] }
+tonic = { version = "0.13.0", features = [
+  "tls-ring",
+  "tls-native-roots",
+  "gzip",
+] }
+tokio = { version = "1.44.1", features = ["macros", "rt-multi-thread"] }
 tokio-stream = "0.1.17"
-prost = "0.13.4"
-prost-types = "0.13.4"
+prost = "0.13.5"
+prost-types = "0.13.5"
 hound = "3.5.1"
 cpal = "0.15.3"
 
@@ -29,7 +33,7 @@ cpal = "0.15.3"
 dotenv = "0.15.0"
 
 [build-dependencies]
-tonic-build = "0.12.3"
+tonic-build = "0.13.0"
 
 [[example]]
 name = "functions"
