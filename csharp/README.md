@@ -4,9 +4,12 @@ This is the C# client implementation for the Aristech NLP-Server.
 
 ## Installation
 
+The package is not published to NuGet yet but will be soon.
+
+<!-- 
 ```bash
 dotnet add package Aristech.NlpClient
-```
+``` -->
 
 ## Usage
 
