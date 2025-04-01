@@ -4,13 +4,7 @@ description = "A Rust client library for the Aristech Natrual Language Processin
 version = "1.0.0"
 edition = "2021"
 repository = "https://github.com/aristech-de/nlp-clients"
-keywords = [
-  "natural-language-processing",
-  "nlp",
-  "real-time",
-  "streaming",
-  "client-library",
-]
+keywords = ["nlp", "real-time", "streaming", "client-library"]
 homepage = "https://github.com/aristech-de/nlp-clients/blob/main/rust/README.md"
 authors = ["Martin Mende"]
 license = "MIT"
