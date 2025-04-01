@@ -4,9 +4,11 @@ This is the Python client implementation for the Aristech NLP-Server.
 
 ## Installation
 
-```bash
+The package is not published to PyPI yet but will be soon.
+
+<!-- ```bash
 pip install aristech-nlp-client
-```
+``` -->
 
 ## Usage
 
