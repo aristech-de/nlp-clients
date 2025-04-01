@@ -1,0 +1,84 @@
+// Copyright Aristech GmbH
+
+syntax = "proto3";
+import "projects.proto";
+import "intents.proto";
+
+option java_multiple_files = true;
+option objc_class_prefix = "ATS";
+
+package aristech.nlp;
+
+
+// Interface exported by the server.
+service NLPServer {
+  // A simple RPC.
+  // returns all available processing Models.
+  rpc GetFunctions(FunctionRequest) returns (stream Function) {}
+
+  // A server-to-client streaming method
+  // Returns the processed text
+  rpc RunFunctions(RunFunctionsRequest) returns (RunFunctionsResponse) {}
+
+  // Method to add content to a vector database.
+  rpc UpdateContent(UpdateContentRequest) returns (UpdateContentResponse) {}
+  // Method to remove content from a vector database.
+  rpc RemoveContent(RemoveContentRequest) returns (RemoveContentResponse) {}
+  // Method to get content from a vector database.
+  rpc GetContent(GetContentRequest) returns (stream GetContentResponse) {}
+  // Method to initialize a project
+  rpc AddProject(AddProjectRequest) returns (AddProjectResponse) {}
+  // Method to remove Project
+  rpc RemoveProject(RemoveProjectRequest) returns (RemoveProjectResponse) {}
+  // update the settings of a project
+  rpc UpdateProject(UpdateProjectRequest) returns (UpdateProjectResponse) {}
+  // Method to get projects from a vector database
+  rpc GetProjects(GetProjectsRequest) returns (stream Project) {}
+  // Method to get intents from a project
+  rpc GetIntents(GetIntentsRequest) returns (stream GetIntentsResponse) {}
+  // Method to get score limits for a project
+  rpc GetScoreLimits(GetScoreLimitsRequest) returns (GetScoreLimitsResponse) {}
+  // get the available embedding models to be used for similarity search
+  rpc GetEmbeddingModels(GetEmbeddingModelsRequest) returns (stream EmbeddingModel) {}
+}
+
+
+// Request for list of functions that server provides
+message FunctionRequest {}
+
+
+
+// A function is a specific operation or information that can be performed on
+// incoming text. I.E. Classification, recasing etc.
+message Function {
+  // An unique ID for the function used (i.e. useful when using different
+  // versions of a functions)
+  string id = 1;
+  // An self-explaining name of the function
+  string name = 2;
+  // A description of the function.
+  string description = 3;
+  // A list of arguments for the function
+  repeated string arguments = 4;
+}
+
+// Process raw text input.
+message RunFunctionsRequest {
+
+  // Function to be requested
+  repeated Function functions = 1;
+  // The input to be processed
+  string input = 2;
+  // Arguments, if necessary. I.E. switchting between raw output and debug
+  // output.
+  repeated string arguments = 3;
+}
+
+
+message RunFunctionsResponse {
+  // Processed text
+  string output = 1;
+}
+
+
+

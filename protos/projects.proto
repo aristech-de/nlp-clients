@@ -1,0 +1,112 @@
+// Copyright Aristech GmbH
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option objc_class_prefix = "ATS";
+
+package aristech.nlp;
+
+// Methods and datatypes for (vector) content management
+message GetProjectsRequest {}
+
+message Project {
+  // ID of the project
+  string id = 1;
+  // Name of the project
+  string name = 2;
+}
+
+
+//adds a project to the underlying database(s)
+message AddProjectRequest {
+  // Project name
+  string name = 1;
+  // description of the project
+  string description = 2;
+  // model to use for vectorembeddings
+  EmbeddingModel embedding_model =3;
+  // Fallback Messages
+  repeated FallbackMessage fallback_messages = 4;
+  // default_threshold for search requests
+  float default_threshold = 5;
+  string team_id = 6;
+  bool debug_mode = 7;
+  bool exclude_output_from_search = 8;
+  History history = 9;
+  string config_slug = 10;
+  string slug = 11;
+}
+
+message FallbackMessage {
+  enum Type {
+    CHAT =0;
+    EMAIL = 1;
+    VOICE = 2;
+  }
+  string message = 1;
+  Type type = 2;
+}
+
+
+
+message History {
+  // object id with the creator id
+  string creator_id = 1;
+  // id of the user who made the last change
+  string changed_by = 2;
+  // Date of creation
+  string creation_date = 3;
+  // date of last edit
+  string last_edit_date = 4;
+}
+
+
+
+// response for adding a project. returns the project_id of the created project
+message AddProjectResponse {
+  // id of the created project
+  string project_id = 1;
+}
+
+// removes the project and all of its content
+message RemoveProjectRequest {
+// ID of the project to be removed
+  string project_id = 1;
+}
+
+// response for remove project request
+message RemoveProjectResponse {}
+
+// request to get all available embedding models from the server
+message GetEmbeddingModelsRequest {}
+
+
+message EmbeddingModel {
+  string name = 1;
+  int32 dimensions = 2;
+  string base_library = 3;
+  repeated string locale = 4;
+}
+
+message UpdateProjectRequest {
+  // the id of the project to be updated, if no id is set, a new project is created
+  string project_id = 1;
+  // Project name
+  string name = 2;
+  // description of the project
+  string description = 3;
+  // model to use for vectorembeddings
+  EmbeddingModel embedding_model =4;
+  // Fallback Messages
+  repeated FallbackMessage fallback_messages = 5;
+  // default_threshold for search requests
+  float default_threshold = 6;
+  bool debug_mode = 7;
+  bool exclude_output_from_search = 8;
+  History history = 9;
+  string config_slug = 10;
+  string slug = 11;
+}
+
+message UpdateProjectResponse {}

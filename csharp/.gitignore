@@ -1,0 +1,52 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider project files
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+
+# Mac system files
+.DS_Store
+
+# Logs
+*.log
+
+# Test results
+TestResults/
+*.coverage
+*.coveragexml
+
+# NuGet
+*.nupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Auto-generated files
+Generated*/    # In case you generate client stubs to folders
+GrpcClient.xml # XML doc output, if generated
+
+# Dotnet-specific cache
+*.pidb
+*.pdb
+*.mdb
+
+# Others
+_ReSharper*/

@@ -1,0 +1,58 @@
+{
+  "name": "@aristech-org/nlp-client",
+  "version": "1.0.0",
+  "description": "A Node.js client library for the Aristech Natural-Language-Processing API",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "tsx --test",
+    "start": "tsx watch src/index.ts",
+    "build": "tsc -p .",
+    "generate": "mkdir -p src/generated && ./proto2Typescript.sh",
+    "type-check": "tsc --noEmit",
+    "prepare": "simple-git-hooks"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npm run --prefix node type-check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aristech-de/nlp-clients.git"
+  },
+  "keywords": [
+    "natural-language-processing",
+    "nlp",
+    "real-time",
+    "streaming",
+    "client-library"
+  ],
+  "author": "Martin Mende",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aristech-de/nlp-clients/issues"
+  },
+  "homepage": "https://github.com/aristech-de/nlp-clients#readme",
+  "devDependencies": {
+    "@types/node": "22.10.5",
+    "dotenv": "16.4.7",
+    "simple-git-hooks": "^2.11.1",
+    "ts-proto": "2.6.1",
+    "tsx": "4.19.2",
+    "typescript": "5.7.2"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "2.2.3",
+    "@grpc/grpc-js": "1.12.5"
+  },
+  "exports": {
+  ".": "./dist/index.js",
+  "./dist/generated/intents": "./dist/generated/intents.js",
+  "./dist/generated/nlp_server": "./dist/generated/nlp_server.js",
+  "./dist/generated/project": "./dist/generated/project.js"
+  }
+}

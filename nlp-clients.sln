@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "csharp", "csharp", "{B41BF331-FCCB-2ADF-CDB6-767964B34647}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NlpClient", "csharp\NlpClient\NlpClient.csproj", "{F93C0B31-935F-BD9A-83D3-D572E4D0A10F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F93C0B31-935F-BD9A-83D3-D572E4D0A10F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F93C0B31-935F-BD9A-83D3-D572E4D0A10F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F93C0B31-935F-BD9A-83D3-D572E4D0A10F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F93C0B31-935F-BD9A-83D3-D572E4D0A10F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F93C0B31-935F-BD9A-83D3-D572E4D0A10F} = {B41BF331-FCCB-2ADF-CDB6-767964B34647}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24D64541-1732-4188-99F5-E31A9EB6BB00}
+	EndGlobalSection
+EndGlobal

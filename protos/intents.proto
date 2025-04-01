@@ -1,0 +1,168 @@
+// Copyright Aristech GmbH
+syntax = "proto3";
+
+option java_multiple_files = true;
+option objc_class_prefix = "ATS";
+
+package aristech.nlp;
+
+
+message Intent {
+  enum InputType {
+    CHAT = 0;
+    MAIL = 1;
+    VOICE = 2;
+  }
+  // ID of the intent
+  string id = 1;
+  // The project ID of the intent
+  string project_id = 2;
+  // The default locale for the intent's inputs and outputs
+  string locale = 3;
+  // Topic of the intent
+  string topic = 4;
+  // Inputs for the intent
+  repeated IntentInput inputs = 5;
+  // Possible chat outputs for the intent
+  repeated string output_chat = 6;
+  // Possible voice outputs for the intent
+  // This is usually a JSON string with key value pairs e.g. {"extension": "1234", "text": "I will redirect you to the support team"}
+  repeated string output_voice = 7;
+  // Possible email outputs for the intent
+  repeated string output_email = 8;
+  // relation to other intents
+  repeated Relation related_to = 9;
+  // If the intent is a draft
+  bool published = 10;
+  // Type of the intents inputs
+  InputType type = 11;
+  bool exclude_output_from_search = 12;
+  // List of keywords to force finding this intent
+  repeated Keyword keywords =13;
+  string creator_id = 14;
+}
+
+// a type defining an input and its mapping to a uuid. if the uuid is set, the input gets edited
+// to the new input, if no id is set or the uuid does not exist, a new input is added to the 
+// intent.
+message IntentInput {
+  string uuid = 1;
+  string input = 2;
+}
+
+message Relation {
+  // list of ids of  parent intents
+  repeated string parents =1;
+  // list of ids of  child intents
+  repeated string children = 2;
+  // list of ids of same level intents
+  repeated string peers = 3;
+}
+
+message Keyword {
+  // a keyword for an intent
+  string keyword = 1;
+  // the priority for the keyword
+  int32 priority = 2;
+}
+
+// Adds or updates content to the vector database
+// if id of the intent is not set, a new intent is created for the project
+// if an id is set: first check if that id already exists and update it
+// if the id doesn't exist: create the intent with the given id.
+message UpdateContentRequest {
+  repeated Intent intents = 1;
+}
+
+// Response for add content
+message UpdateContentResponse {
+  // Status of the update
+  repeated string intent_ids = 1;
+}
+
+// Removes content from the vector database
+message RemoveContentRequest {
+  // ID of the Document to be removed
+  repeated string id = 1;
+  // 
+  string project_id = 2;
+}
+
+// Response for remove content
+message RemoveContentResponse {}
+
+
+
+// Request for content
+message GetContentRequest {
+  // Prompt for the content to be retrieved
+  string prompt = 1;
+  // Meta data for the content to be retrieved
+  string project_id = 2;
+  // The number of results to be returned
+  int32 num_results = 3;
+  // The threshold for the results to be returned
+  float threshold = 4;
+  // Content Filters
+  repeated ContentFilter filters = 5;
+  // Chat id for context
+  string chat_id = 7;
+}
+
+// Response for content
+message GetContentResponse {
+  // List of intents
+  repeated ContentResponseItem items = 1;
+  // The Chat ID that was sent to the server with the get content request
+  string chat_id = 2;
+}
+
+message ContentFilter {
+  // The field to be filtered
+  string field = 1;
+  // The value to be filtered
+  string value = 2;
+  // Operator
+  string operator = 3;
+  // The label to be used for filtering
+  repeated string label = 4;
+}
+
+// Response item for content
+message ContentResponseItem {
+  // Id of the intent's input that represents this match
+  string id = 1;
+  // Score of the content
+  float score = 2;
+  // The actual intent
+  Intent intent = 3;
+  // fallbackmessage, gets set, when no intent was found in the search
+  string fallback_message = 4;
+}
+
+
+
+message GetIntentsRequest { 
+  string project_id = 1; 
+}
+
+message GetIntentsResponse {
+  repeated Intent intent = 1;
+}
+
+message GetScoreLimitsRequest {
+  // ID of the project to get the score Limits from
+  string project_id = 1;
+  // List of sentences to test for the upper limit
+  repeated string test_sentences_upper_limit = 2;
+  // List of sentences to test for the lower limit
+  repeated string test_sentences_lower_limit = 3;
+}
+
+message GetScoreLimitsResponse {
+  // The minimum threshold determined by random sentences
+  float min_threshold = 1;
+  // The max threshold determined by using original input sentences for the
+  // intents
+  float max_threshold = 2;
+}

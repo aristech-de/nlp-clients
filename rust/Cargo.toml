@@ -1,0 +1,55 @@
+[package]
+name = "aristech-nlp-client"
+description = "A Rust client library for the Aristech Natrual Language Processing API"
+version = "1.0.0"
+edition = "2021"
+repository = "https://github.com/aristech-de/nlp-clients"
+keywords = [
+  "natural-language-processing",
+  "nlp",
+  "real-time",
+  "streaming",
+  "client-library",
+]
+homepage = "https://github.com/aristech-de/nlp-clients/blob/main/rust/README.md"
+authors = ["Martin Mende"]
+license = "MIT"
+categories = ["api-bindings"]
+
+[dependencies]
+tonic = { version = "0.12.3", features = ["tls", "tls-native-roots", "gzip"] }
+tokio = { version = "1.42.0", features = ["macros", "rt-multi-thread"] }
+tokio-stream = "0.1.17"
+prost = "0.13.4"
+prost-types = "0.13.4"
+hound = "3.5.1"
+cpal = "0.15.3"
+
+[dev-dependencies]
+dotenv = "0.15.0"
+
+[build-dependencies]
+tonic-build = "0.12.3"
+
+[[example]]
+name = "functions"
+path = "examples/functions.rs"
+
+[[example]]
+name = "process"
+path = "examples/process.rs"
+
+[[example]]
+name = "projects"
+path = "examples/projects.rs"
+
+[[example]]
+name = "intents"
+path = "examples/intents.rs"
+
+[[example]]
+name = "scoreLimits"
+
+[[example]]
+name = "content"
+path = "examples/content.rs"
