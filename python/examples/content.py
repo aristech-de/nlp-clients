@@ -9,8 +9,8 @@ client = NlpClient(host=host, ssl=ssl, root_cert=root_cert, auth_token=auth_toke
 responses = client.get_content(GetContentRequest(
     prompt=prompt,
     threshold=0.5,
-    numResults=3,
-    projectId=project_id,
+    num_results=3,
+    project_id=project_id,
 ))
 
 try:
