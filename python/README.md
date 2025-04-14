@@ -61,7 +61,7 @@ python examples/functions.py
 1. Clone the repository
 2. Add .env file inside the python/src/aristech_nlp_client/ directory. Format as shown above.
 3. Move all files from python/examples/ into python/src/aristech_nlp_client/
-4. In python/src/aristech_nlp_client/client.py update the relative imports starting with . to use the proto. prefix instead:
+4. In python/src/aristech_nlp_client/client.py update the relative imports starting with "." to use the "proto." prefix instead:
 
 ```
 from proto.nlp_server_pb2_grpc import *
