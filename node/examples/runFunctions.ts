@@ -10,7 +10,7 @@ const client = new NlpClient({
   rootCert: process.env.ROOT_CERT,
   auth,
 })
-const response = await client.process({
+const response = await client.runFunctions({
   input: 'hello world',
   functions: [
     { id: 'spellcheck-de' },

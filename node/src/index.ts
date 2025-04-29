@@ -107,7 +107,7 @@ export class NlpClient {
    * @param request The request object
    * @returns A promise that resolves with the response object
    */
-  async process(
+  async runFunctions(
     request: DeepPartial<RunFunctionsRequest>,
   ): Promise<RunFunctionsResponse> {
     return new Promise((res, rej) => {
@@ -121,6 +121,18 @@ export class NlpClient {
         }
       })
     })
+  }
+  
+  /**
+   * Performs a processing request with the given request
+   * @deprecated Use `runFunctions` instead
+   * @param request The request object
+   * @returns A promise that resolves with the response object
+   */
+  async process(
+    request: DeepPartial<RunFunctionsRequest>,
+  ): Promise<RunFunctionsResponse> {
+    return this.runFunctions(request)
   }
 
   /**
