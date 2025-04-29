@@ -5,7 +5,7 @@ client = NlpClient(host=host, ssl=ssl, root_cert=root_cert, auth_token=auth_toke
 response = client.run_functions(RunFunctionsRequest(
     input="hallo wie geht es dir",
     functions=[
-        Function(id="'recasepunct-de")
+        Function(id="recasepunct-de")
     ]
 ))
 print(response.output)

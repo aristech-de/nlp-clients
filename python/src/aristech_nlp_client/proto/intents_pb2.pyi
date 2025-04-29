@@ -76,7 +76,9 @@ class Intent(google.protobuf.message.Message):
 
     @property
     def output_voice(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """Possible voice outputs for the intent"""
+        """Possible voice outputs for the intent
+        This is usually a JSON string with key value pairs e.g. {"extension": "1234", "text": "I will redirect you to the support team"}
+        """
 
     @property
     def output_email(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:

@@ -4,11 +4,11 @@ This is the Python client implementation for the Aristech NLP-Server.
 
 ## Installation
 
-The package is not published to PyPI yet but will be soon.
+To install the package, you can use pip:
 
-<!-- ```bash
+```sh
 pip install aristech-nlp-client
-``` -->
+```
 
 ## Usage
 
@@ -16,20 +16,19 @@ pip install aristech-nlp-client
 from aristech_nlp_client import NlpClient
 
 client = NlpClient(host='nlp.example.com')
-data = client.synthesize(SpeechRequest(
-    text='Hello, world!',
-    options=SpeechRequestOption(
-      voice_id='some-voice-id'
-    )
+response = client.run_functions(RunFunctionsRequest(
+    input='Hello, world!',
+    functions=[
+        Function(id="recasepunct-de")
+    ]
 ))
-with open('output.wav', 'wb') as f:
-    f.write(data)
+print(response.output)
 ```
 
 There are several examples in the [examples](.) directory:
 
 - [functions.py](https://github.com/aristech-de/nlp-clients/blob/main/python/examples/models.py): Demonstrates how to list the available functions.
-- [process.py](https://github.com/aristech-de/nlp-clients/blob/main/python/examples/process.py): Demonstrates how to perform NLP processing on a text.
+- [run_functions.py](https://github.com/aristech-de/nlp-clients/blob/main/python/examples/run_functions.py): Demonstrates how to perform NLP processing on a text.
 - [projects.py](https://github.com/aristech-de/nlp-clients/blob/main/python/examples/projects.py): Demonstrates how to list the available projects.
 - [intents.py](https://github.com/aristech-de/nlp-clients/blob/main/python/examples/intents.py): Demonstrates how to list intents for a project.
 - [scoreLimits.py](https://github.com/aristech-de/nlp-clients/blob/main/python/examples/scoreLimits.py): Demonstrates how to use score limits to figure out good thresholds for intents.

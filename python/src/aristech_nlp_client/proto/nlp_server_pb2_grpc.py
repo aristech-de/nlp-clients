@@ -7,7 +7,7 @@ from . import intents_pb2 as intents__pb2
 from . import nlp_server_pb2 as nlp__server__pb2
 from . import projects_pb2 as projects__pb2
 
-GRPC_GENERATED_VERSION = '1.70.0'
+GRPC_GENERATED_VERSION = '1.68.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 

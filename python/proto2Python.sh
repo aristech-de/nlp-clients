@@ -29,6 +29,12 @@ python -m grpc_tools.protoc \
 # from . import projects_pb2 as projects__pb2
 # from . import intents_pb2 as intents__pb2
 sed -i '' 's/import nlp_server_pb2 as nlp__server__pb2/from . import nlp_server_pb2 as nlp__server__pb2/g' ${OUT_DIR}/nlp_server_pb2_grpc.py
+sed -i '' 's/import intents_pb2 as intents__pb2/from . import intents_pb2 as intents__pb2/g' ${OUT_DIR}/nlp_server_pb2_grpc.py
+sed -i '' 's/import projects_pb2 as projects__pb2/from . import projects_pb2 as projects__pb2/g' ${OUT_DIR}/nlp_server_pb2_grpc.py
+
+sed -i '' 's/import projects_pb2 as projects__pb2/from . import projects_pb2 as projects__pb2/g' ${OUT_DIR}/nlp_server_pb2.py
+sed -i '' 's/import intents_pb2 as intents__pb2/from . import intents_pb2 as intents__pb2/g' ${OUT_DIR}/nlp_server_pb2.py
+
 sed -i '' 's/import projects_pb2 as projects__pb2/from . import projects_pb2 as projects__pb2/g' ${OUT_DIR}/projects_pb2_grpc.py
 sed -i '' 's/import intents_pb2 as intents__pb2/from . import intents_pb2 as intents__pb2/g' ${OUT_DIR}/intents_pb2_grpc.py
 

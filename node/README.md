@@ -14,7 +14,7 @@ npm install @aristech-org/nlp-client
 import { NlpClient } from '@aristech-org/nlp-client'
 
 const client = new NlpClient({ host: 'nlp.example.com' })
-const response = await client.process({
+const response = await client.runFunctions({
   input: 'hello world',
   functions: [{ id: 'spellcheck-de' }]
 })

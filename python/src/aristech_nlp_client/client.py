@@ -3,12 +3,12 @@ import re
 
 from typing import Iterable
 
-from .nlp_server_pb2_grpc import *
-from .nlp_server_pb2 import *
-from .projects_pb2_grpc import *
-from .projects_pb2 import *
-from .intents_pb2_grpc import *
-from .intents_pb2 import *
+from .proto.nlp_server_pb2_grpc import *
+from .proto.nlp_server_pb2 import *
+from .proto.projects_pb2_grpc import *
+from .proto.projects_pb2 import *
+from .proto.intents_pb2_grpc import *
+from .proto.intents_pb2 import *
 
 class NlpClient:
     host: str
