@@ -54,3 +54,25 @@ SECRET=your-secret
 ```sh
 python examples/functions.py
 ```
+
+## Running from Source
+
+1. Clone the repository
+2. Add .env file inside the python/src/aristech_nlp_client/ directory. Format as shown above.
+3. Move all files from python/examples/ into python/src/aristech_nlp_client/
+4. In python/src/aristech_nlp_client/client.py update the relative imports starting with "." to use the "proto." prefix instead:
+
+```
+from proto.nlp_server_pb2_grpc import *
+from proto.nlp_server_pb2 import *
+from proto.projects_pb2_grpc import *
+from proto.projects_pb2 import *
+from proto.intents_pb2_grpc import *
+from proto.intents_pb2 import *
+```
+
+5. Rename client.py to aristech_nlp_client.py.
+6. Create a virtual environment and install the requirements:\
+```pip install grpcio-tools dotenv```
+
+Run python/src/aristech_nlp_client/functions.py to ensure everything is working correctly.
