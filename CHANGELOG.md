@@ -1,5 +1,8 @@
 # Changelog
 
+## NodeJS v1.1.1 - 2025-05-16
+- Bumped dependencies.
+
 ## Python v1.0.1 - 2025-04-29
 - Updated documentation.
 
