@@ -19,10 +19,12 @@ pub fn get_tls_options() -> Result<Option<TlsOptions>, Box<dyn Error>> {
     };
     let tls_options = {
         match (std::env::var("TOKEN"), std::env::var("SECRET")) {
-            (Ok(token), Ok(secret)) => Some(TlsOptions {
-                ca_certificate: root_cert,
-                auth: Some(Auth { token, secret }),
-            }),
+            (Ok(token), Ok(secret)) if !token.is_empty() && !secret.is_empty() => {
+                Some(TlsOptions {
+                    ca_certificate: root_cert,
+                    auth: Some(Auth { token, secret }),
+                })
+            }
             _ => match root_cert {
                 Some(root_cert) => Some(TlsOptions {
                     ca_certificate: Some(root_cert),

@@ -2,6 +2,9 @@
 
 ## NodeJS v1.1.1 - 2025-05-16
 - Bumped dependencies.
+## Rust v1.0.2 - 2025-05-16
+- Bumped dependencies.
+- Fixed connection issues with non TLS endpoints when specifying empty token or secret.
 
 ## Python v1.0.1 - 2025-04-29
 - Updated documentation.
