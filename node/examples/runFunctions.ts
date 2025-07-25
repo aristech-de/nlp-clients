@@ -13,7 +13,7 @@ const client = new NlpClient({
 const response = await client.runFunctions({
   input: 'hello world',
   functions: [
-    { id: 'spellcheck-de' },
+    { id: 'spell' },
   ]
 })
 console.log(response)

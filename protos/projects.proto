@@ -7,106 +7,178 @@ option objc_class_prefix = "ATS";
 
 package aristech.nlp;
 
-// Methods and datatypes for (vector) content management
+/**
+ * This file defines messages and methods for managing projects.
+ * Projects contain configurations and metadata.
+ */
+
+/**
+ * GetProjectsRequest
+ * ------------------
+ * Empty request to retrieve all projects.
+ */
 message GetProjectsRequest {}
 
+/**
+ * Project
+ * -------
+ * A project represents a collection of intents.
+ */
 message Project {
-  // ID of the project
+  // Unique ID of the project.
   string id = 1;
-  // Name of the project
+  // Name of the project.
   string name = 2;
 }
 
-
-//adds a project to the underlying database(s)
+/**
+ * AddProjectRequest
+ * ------------------
+ * Request to add a new project.
+ */
 message AddProjectRequest {
-  // Project name
+  // Name of the project.
   string name = 1;
-  // description of the project
+  // Description of the project.
   string description = 2;
-  // model to use for vectorembeddings
-  EmbeddingModel embedding_model =3;
-  // Fallback Messages
+  // Model used for vectorization.
+  EmbeddingModel embedding_model = 3;
+  // Predefined fallback messages for different channels.
   repeated FallbackMessage fallback_messages = 4;
-  // default_threshold for search requests
+  // Default threshold for search queries.
   float default_threshold = 5;
+  // ID of the associated team.
   string team_id = 6;
+  // Enables debug mode for the project.
   bool debug_mode = 7;
+  // Exclude output from search queries.
   bool exclude_output_from_search = 8;
+  // Metadata about creation and changes.
   History history = 9;
+  // Configuration-specific identifier.
   string config_slug = 10;
+  // URL-friendly identifier of the project.
   string slug = 11;
 }
 
+/**
+ * FallbackMessage
+ * ---------------
+ * Represents a fallback message used when no direct answer or match is found.
+ */
 message FallbackMessage {
-  enum Type {
-    CHAT =0;
+  enum Channel {
+    CHAT = 0;
     EMAIL = 1;
     VOICE = 2;
   }
+  // The fallback message text.
   string message = 1;
-  Type type = 2;
+  // The channel for which this message is intended (e.g., CHAT, EMAIL, VOICE).
+  Channel channel = 2;
+  // Map for structured fallback messages.
+  map<string, string> message_map = 3;
 }
 
-
-
+/**
+ * History
+ * -------
+ * Stores metadata about the history of a project.
+ */
 message History {
-  // object id with the creator id
+  // IDs of the creator and last editor.
   string creator_id = 1;
-  // id of the user who made the last change
+  // ID of the last person who changed the project.
   string changed_by = 2;
-  // Date of creation
+  // Creation date of the project.
   string creation_date = 3;
-  // date of last edit
+  // Date of the last edit to the project.
   string last_edit_date = 4;
 }
 
-
-
-// response for adding a project. returns the project_id of the created project
+/**
+ * AddProjectResponse
+ * ------------------
+ * Response message for project creation.
+ */
 message AddProjectResponse {
-  // id of the created project
+  // ID of the newly created project.
   string project_id = 1;
 }
 
-// removes the project and all of its content
+/**
+ * RemoveProjectRequest
+ * ----------------------
+ * Request to remove a project.
+ */
 message RemoveProjectRequest {
-// ID of the project to be removed
+  // ID of the project to remove.
   string project_id = 1;
 }
 
-// response for remove project request
+/**
+ * RemoveProjectResponse
+ * -----------------------
+ * Response message for project removal.
+ */
 message RemoveProjectResponse {}
 
-// request to get all available embedding models from the server
+/**
+ * GetEmbeddingModelsRequest
+ * --------------------------
+ * Request to retrieve all available embedding models.
+ */
 message GetEmbeddingModelsRequest {}
 
-
+/**
+ * EmbeddingModel
+ * --------------
+ * Represents a model for vectorizing content.
+ */
 message EmbeddingModel {
+  // Name of the embedding model.
   string name = 1;
+  // Number of dimensions of the embedding.
   int32 dimensions = 2;
+  // Base library used for the embedding model.
   string base_library = 3;
+  // List of supported locales for the embedding model.
   repeated string locale = 4;
 }
 
+/**
+ * UpdateProjectRequest
+ * ----------------------
+ * Request to update an existing project or create a new one if no project_id is provided.
+ */
 message UpdateProjectRequest {
-  // the id of the project to be updated, if no id is set, a new project is created
+  // ID of the project to update. If missing, a new project is created.
   string project_id = 1;
-  // Project name
+  // Name of the project.
   string name = 2;
-  // description of the project
+  // Description of the project.
   string description = 3;
-  // model to use for vectorembeddings
-  EmbeddingModel embedding_model =4;
-  // Fallback Messages
+  // Model used for vectorization.
+  EmbeddingModel embedding_model = 4;
+  // Predefined fallback messages for different channels.
   repeated FallbackMessage fallback_messages = 5;
-  // default_threshold for search requests
+  // Default threshold for search queries.
   float default_threshold = 6;
+  // Enables debug mode for the project.
   bool debug_mode = 7;
+  // Exclude output from search queries.
   bool exclude_output_from_search = 8;
+  // Metadata about creation and changes.
   History history = 9;
+  // Configuration-specific identifier.
   string config_slug = 10;
+  // URL-friendly identifier of the project.
   string slug = 11;
 }
 
+/**
+ * UpdateProjectResponse
+ * -----------------------
+ * Response message for project update or creation.
+ */
 message UpdateProjectResponse {}

@@ -9,76 +9,194 @@ option objc_class_prefix = "ATS";
 
 package aristech.nlp;
 
-
-// Interface exported by the server.
+/**
+ * NLPServer provides the interface for various NLP functionalities.
+ * These functions include text processing, content management in projects,
+ * and interaction with vectorized data structures.
+ */
 service NLPServer {
-  // A simple RPC.
-  // returns all available processing Models.
+  /**
+   * GetFunctions
+   * -------------
+   * Returns all available processing functions (models) of the server.
+   * Each function includes a unique ID, a descriptive name,
+   * a description, and a list of possible arguments.
+   *
+   * Request: FunctionRequest
+   * Response: stream Function
+   */
   rpc GetFunctions(FunctionRequest) returns (stream Function) {}
 
-  // A server-to-client streaming method
-  // Returns the processed text
+  /**
+   * RunFunctions
+   * -------------
+   * Processes the provided raw text using the specified functions.
+   * Multiple functions can be applied sequentially.
+   *
+   * Request: RunFunctionsRequest
+   *   - functions: List of functions to apply.
+   *   - input: The raw text to process.
+   *   - arguments: Additional parameters.
+   * Response: RunFunctionsResponse (contains the processed text result)
+   */
   rpc RunFunctions(RunFunctionsRequest) returns (RunFunctionsResponse) {}
 
-  // Method to add content to a vector database.
+  /**
+   * UpdateContent
+   * --------------
+   * Adds new content or updates existing content.
+   *
+   * Request: UpdateContentRequest
+   * Response: UpdateContentResponse
+   */
   rpc UpdateContent(UpdateContentRequest) returns (UpdateContentResponse) {}
-  // Method to remove content from a vector database.
+
+  /**
+   * RemoveContent
+   * --------------
+   * Removes the specified content.
+   *
+   * Request: RemoveContentRequest
+   * Response: RemoveContentResponse
+   */
   rpc RemoveContent(RemoveContentRequest) returns (RemoveContentResponse) {}
-  // Method to get content from a vector database.
+
+  /**
+   * GetContent
+   * ----------
+   * Retrieves content that is available both as vectorized data and as plain text.
+   *
+   * Request: GetContentRequest
+   * Response: stream GetContentResponse
+   */
   rpc GetContent(GetContentRequest) returns (stream GetContentResponse) {}
-  // Method to initialize a project
+
+  /**
+   * AddProject
+   * -----------
+   * Initializes a new project.
+   *
+   * Request: AddProjectRequest
+   * Response: AddProjectResponse
+   */
   rpc AddProject(AddProjectRequest) returns (AddProjectResponse) {}
-  // Method to remove Project
+
+  /**
+   * RemoveProject
+   * --------------
+   * Removes an existing project and all associated content.
+   *
+   * Request: RemoveProjectRequest
+   * Response: RemoveProjectResponse
+   */
   rpc RemoveProject(RemoveProjectRequest) returns (RemoveProjectResponse) {}
-  // update the settings of a project
+
+  /**
+   * UpdateProject
+   * --------------
+   * Updates the settings or configuration of an existing project.
+   *
+   * Request: UpdateProjectRequest
+   * Response: UpdateProjectResponse
+   */
   rpc UpdateProject(UpdateProjectRequest) returns (UpdateProjectResponse) {}
-  // Method to get projects from a vector database
+
+  /**
+   * GetProjects
+   * -----------
+   * Returns a list of all projects.
+   *
+   * Request: GetProjectsRequest
+   * Response: stream Project
+   */
   rpc GetProjects(GetProjectsRequest) returns (stream Project) {}
-  // Method to get intents from a project
-  rpc GetIntents(GetIntentsRequest) returns (stream GetIntentsResponse) {}
-  // Method to get score limits for a project
+
+  /**
+   * GetIntents
+   * ----------
+   * Retrieves all intents of a project.
+   *
+   * Request: GetIntentsRequest
+   * Response: stream Intent
+   */
+  rpc GetIntents(GetIntentsRequest) returns (stream Intent) {}
+
+  /**
+   * GetScoreLimits
+   * ---------------
+   * Determines score limits for a project based on test inputs.
+   *
+   * Request: GetScoreLimitsRequest
+   * Response: GetScoreLimitsResponse
+   */
   rpc GetScoreLimits(GetScoreLimitsRequest) returns (GetScoreLimitsResponse) {}
-  // get the available embedding models to be used for similarity search
+
+  /**
+   * GetEmbeddingModels
+   * -------------------
+   * Returns a list of available embedding models for similarity searches.
+   *
+   * Request: GetEmbeddingModelsRequest
+   * Response: stream EmbeddingModel
+   */
   rpc GetEmbeddingModels(GetEmbeddingModelsRequest) returns (stream EmbeddingModel) {}
+
+  rpc SyncDBs(SyncDBsRequest) returns (SyncDBsResponse) {}
 }
 
-
-// Request for list of functions that server provides
+/**
+ * FunctionRequest
+ * ---------------
+ * Request for the list of functions provided by the server.
+ */
 message FunctionRequest {}
 
 
-
-// A function is a specific operation or information that can be performed on
-// incoming text. I.E. Classification, recasing etc.
+/**
+ * Function
+ * --------
+ * Describes a specific operation that can be applied to incoming text,
+ * such as classification or recasing.
+ */
 message Function {
-  // An unique ID for the function used (i.e. useful when using different
-  // versions of a functions)
+  // Unique identifier of the function.
   string id = 1;
-  // An self-explaining name of the function
+  // Descriptive name of the function.
   string name = 2;
-  // A description of the function.
+  // Detailed description of the function.
   string description = 3;
-  // A list of arguments for the function
+  // List of arguments accepted by the function.
   repeated string arguments = 4;
 }
 
-// Process raw text input.
-message RunFunctionsRequest {
 
-  // Function to be requested
+/**
+ * RunFunctionsRequest
+ * -------------------
+ * Request to process raw text using specified functions.
+ */
+message RunFunctionsRequest {
+  // List of functions to apply.
   repeated Function functions = 1;
-  // The input to be processed
+  // The raw text to process.
   string input = 2;
-  // Arguments, if necessary. I.E. switchting between raw output and debug
-  // output.
+  // Additional parameters for the functions.
   repeated string arguments = 3;
 }
 
 
+/**
+ * RunFunctionsResponse
+ * --------------------
+ * Response message containing the result of text processing.
+ */
 message RunFunctionsResponse {
-  // Processed text
+  // The processed text result.
   string output = 1;
 }
 
+message SyncDBsRequest {}
 
-
+message SyncDBsResponse {
+  string status = 1;
+}
