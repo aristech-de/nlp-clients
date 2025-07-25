@@ -47,3 +47,5 @@ removeResponse = client.remove_content(RemoveContentRequest(
     projectId=project_id,
 ))
 """
+
+client.close()

@@ -1,5 +1,16 @@
 # Changelog
 
+## Rust v2.0.0 - 2025-07-25
+- Updated to latest protobuf API.
+
+## NodeJS v2.0.0 - 2025-07-25
+- Updated dependencies.
+- Updated to latest protobuf API.
+
+## Python v2.0.0 - 2025-07-25
+- Updated to latest protobuf API.
+- Added close method to the client to allow graceful shutdown of the connection.
+
 ## NodeJS v1.1.1 - 2025-05-16
 - Bumped dependencies.
 ## Rust v1.0.2 - 2025-05-16

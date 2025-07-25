@@ -217,3 +217,7 @@ class NlpClient:
         """
         stub = NLPServerStub(self.channel)
         return stub.AddProject(request)
+    
+    def close(self):
+      if hasattr(self, "channel"):
+          self.channel.close()

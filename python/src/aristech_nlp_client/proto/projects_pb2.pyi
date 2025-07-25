@@ -21,7 +21,15 @@ DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 
 @typing.final
 class GetProjectsRequest(google.protobuf.message.Message):
-    """Methods and datatypes for (vector) content management"""
+    """*
+    This file defines messages and methods for managing projects.
+    Projects contain configurations and metadata.
+
+    *
+    GetProjectsRequest
+    ------------------
+    Empty request to retrieve all projects.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -33,14 +41,20 @@ global___GetProjectsRequest = GetProjectsRequest
 
 @typing.final
 class Project(google.protobuf.message.Message):
+    """*
+    Project
+    -------
+    A project represents a collection of intents.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     ID_FIELD_NUMBER: builtins.int
     NAME_FIELD_NUMBER: builtins.int
     id: builtins.str
-    """ID of the project"""
+    """Unique ID of the project."""
     name: builtins.str
-    """Name of the project"""
+    """Name of the project."""
     def __init__(
         self,
         *,
@@ -53,7 +67,11 @@ global___Project = Project
 
 @typing.final
 class AddProjectRequest(google.protobuf.message.Message):
-    """adds a project to the underlying database(s)"""
+    """*
+    AddProjectRequest
+    ------------------
+    Request to add a new project.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -69,26 +87,33 @@ class AddProjectRequest(google.protobuf.message.Message):
     CONFIG_SLUG_FIELD_NUMBER: builtins.int
     SLUG_FIELD_NUMBER: builtins.int
     name: builtins.str
-    """Project name"""
+    """Name of the project."""
     description: builtins.str
-    """description of the project"""
+    """Description of the project."""
     default_threshold: builtins.float
-    """default_threshold for search requests"""
+    """Default threshold for search queries."""
     team_id: builtins.str
+    """ID of the associated team."""
     debug_mode: builtins.bool
+    """Enables debug mode for the project."""
     exclude_output_from_search: builtins.bool
+    """Exclude output from search queries."""
     config_slug: builtins.str
+    """Configuration-specific identifier."""
     slug: builtins.str
+    """URL-friendly identifier of the project."""
     @property
     def embedding_model(self) -> global___EmbeddingModel:
-        """model to use for vectorembeddings"""
+        """Model used for vectorization."""
 
     @property
     def fallback_messages(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___FallbackMessage]:
-        """Fallback Messages"""
+        """Predefined fallback messages for different channels."""
 
     @property
-    def history(self) -> global___History: ...
+    def history(self) -> global___History:
+        """Metadata about creation and changes."""
+
     def __init__(
         self,
         *,
@@ -111,39 +136,75 @@ global___AddProjectRequest = AddProjectRequest
 
 @typing.final
 class FallbackMessage(google.protobuf.message.Message):
+    """*
+    FallbackMessage
+    ---------------
+    Represents a fallback message used when no direct answer or match is found.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
-    class _Type:
+    class _Channel:
         ValueType = typing.NewType("ValueType", builtins.int)
         V: typing_extensions.TypeAlias = ValueType
 
-    class _TypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[FallbackMessage._Type.ValueType], builtins.type):
+    class _ChannelEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[FallbackMessage._Channel.ValueType], builtins.type):
         DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
-        CHAT: FallbackMessage._Type.ValueType  # 0
-        EMAIL: FallbackMessage._Type.ValueType  # 1
-        VOICE: FallbackMessage._Type.ValueType  # 2
+        CHAT: FallbackMessage._Channel.ValueType  # 0
+        EMAIL: FallbackMessage._Channel.ValueType  # 1
+        VOICE: FallbackMessage._Channel.ValueType  # 2
 
-    class Type(_Type, metaclass=_TypeEnumTypeWrapper): ...
-    CHAT: FallbackMessage.Type.ValueType  # 0
-    EMAIL: FallbackMessage.Type.ValueType  # 1
-    VOICE: FallbackMessage.Type.ValueType  # 2
+    class Channel(_Channel, metaclass=_ChannelEnumTypeWrapper): ...
+    CHAT: FallbackMessage.Channel.ValueType  # 0
+    EMAIL: FallbackMessage.Channel.ValueType  # 1
+    VOICE: FallbackMessage.Channel.ValueType  # 2
+
+    @typing.final
+    class MessageMapEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        value: builtins.str
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: builtins.str = ...,
+        ) -> None: ...
+        def ClearField(self, field_name: typing.Literal["key", b"key", "value", b"value"]) -> None: ...
 
     MESSAGE_FIELD_NUMBER: builtins.int
-    TYPE_FIELD_NUMBER: builtins.int
+    CHANNEL_FIELD_NUMBER: builtins.int
+    MESSAGE_MAP_FIELD_NUMBER: builtins.int
     message: builtins.str
-    type: global___FallbackMessage.Type.ValueType
+    """The fallback message text."""
+    channel: global___FallbackMessage.Channel.ValueType
+    """The channel for which this message is intended (e.g., CHAT, EMAIL, VOICE)."""
+    @property
+    def message_map(self) -> google.protobuf.internal.containers.ScalarMap[builtins.str, builtins.str]:
+        """Map for structured fallback messages."""
+
     def __init__(
         self,
         *,
         message: builtins.str = ...,
-        type: global___FallbackMessage.Type.ValueType = ...,
+        channel: global___FallbackMessage.Channel.ValueType = ...,
+        message_map: collections.abc.Mapping[builtins.str, builtins.str] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["message", b"message", "type", b"type"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["channel", b"channel", "message", b"message", "message_map", b"message_map"]) -> None: ...
 
 global___FallbackMessage = FallbackMessage
 
 @typing.final
 class History(google.protobuf.message.Message):
+    """*
+    History
+    -------
+    Stores metadata about the history of a project.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     CREATOR_ID_FIELD_NUMBER: builtins.int
@@ -151,13 +212,13 @@ class History(google.protobuf.message.Message):
     CREATION_DATE_FIELD_NUMBER: builtins.int
     LAST_EDIT_DATE_FIELD_NUMBER: builtins.int
     creator_id: builtins.str
-    """object id with the creator id"""
+    """IDs of the creator and last editor."""
     changed_by: builtins.str
-    """id of the user who made the last change"""
+    """ID of the last person who changed the project."""
     creation_date: builtins.str
-    """Date of creation"""
+    """Creation date of the project."""
     last_edit_date: builtins.str
-    """date of last edit"""
+    """Date of the last edit to the project."""
     def __init__(
         self,
         *,
@@ -172,13 +233,17 @@ global___History = History
 
 @typing.final
 class AddProjectResponse(google.protobuf.message.Message):
-    """response for adding a project. returns the project_id of the created project"""
+    """*
+    AddProjectResponse
+    ------------------
+    Response message for project creation.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     PROJECT_ID_FIELD_NUMBER: builtins.int
     project_id: builtins.str
-    """id of the created project"""
+    """ID of the newly created project."""
     def __init__(
         self,
         *,
@@ -190,13 +255,17 @@ global___AddProjectResponse = AddProjectResponse
 
 @typing.final
 class RemoveProjectRequest(google.protobuf.message.Message):
-    """removes the project and all of its content"""
+    """*
+    RemoveProjectRequest
+    ----------------------
+    Request to remove a project.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     PROJECT_ID_FIELD_NUMBER: builtins.int
     project_id: builtins.str
-    """ID of the project to be removed"""
+    """ID of the project to remove."""
     def __init__(
         self,
         *,
@@ -208,7 +277,11 @@ global___RemoveProjectRequest = RemoveProjectRequest
 
 @typing.final
 class RemoveProjectResponse(google.protobuf.message.Message):
-    """response for remove project request"""
+    """*
+    RemoveProjectResponse
+    -----------------------
+    Response message for project removal.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -220,7 +293,11 @@ global___RemoveProjectResponse = RemoveProjectResponse
 
 @typing.final
 class GetEmbeddingModelsRequest(google.protobuf.message.Message):
-    """request to get all available embedding models from the server"""
+    """*
+    GetEmbeddingModelsRequest
+    --------------------------
+    Request to retrieve all available embedding models.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -232,6 +309,12 @@ global___GetEmbeddingModelsRequest = GetEmbeddingModelsRequest
 
 @typing.final
 class EmbeddingModel(google.protobuf.message.Message):
+    """*
+    EmbeddingModel
+    --------------
+    Represents a model for vectorizing content.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     NAME_FIELD_NUMBER: builtins.int
@@ -239,10 +322,15 @@ class EmbeddingModel(google.protobuf.message.Message):
     BASE_LIBRARY_FIELD_NUMBER: builtins.int
     LOCALE_FIELD_NUMBER: builtins.int
     name: builtins.str
+    """Name of the embedding model."""
     dimensions: builtins.int
+    """Number of dimensions of the embedding."""
     base_library: builtins.str
+    """Base library used for the embedding model."""
     @property
-    def locale(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    def locale(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
+        """List of supported locales for the embedding model."""
+
     def __init__(
         self,
         *,
@@ -257,6 +345,12 @@ global___EmbeddingModel = EmbeddingModel
 
 @typing.final
 class UpdateProjectRequest(google.protobuf.message.Message):
+    """*
+    UpdateProjectRequest
+    ----------------------
+    Request to update an existing project or create a new one if no project_id is provided.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     PROJECT_ID_FIELD_NUMBER: builtins.int
@@ -271,27 +365,33 @@ class UpdateProjectRequest(google.protobuf.message.Message):
     CONFIG_SLUG_FIELD_NUMBER: builtins.int
     SLUG_FIELD_NUMBER: builtins.int
     project_id: builtins.str
-    """the id of the project to be updated, if no id is set, a new project is created"""
+    """ID of the project to update. If missing, a new project is created."""
     name: builtins.str
-    """Project name"""
+    """Name of the project."""
     description: builtins.str
-    """description of the project"""
+    """Description of the project."""
     default_threshold: builtins.float
-    """default_threshold for search requests"""
+    """Default threshold for search queries."""
     debug_mode: builtins.bool
+    """Enables debug mode for the project."""
     exclude_output_from_search: builtins.bool
+    """Exclude output from search queries."""
     config_slug: builtins.str
+    """Configuration-specific identifier."""
     slug: builtins.str
+    """URL-friendly identifier of the project."""
     @property
     def embedding_model(self) -> global___EmbeddingModel:
-        """model to use for vectorembeddings"""
+        """Model used for vectorization."""
 
     @property
     def fallback_messages(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___FallbackMessage]:
-        """Fallback Messages"""
+        """Predefined fallback messages for different channels."""
 
     @property
-    def history(self) -> global___History: ...
+    def history(self) -> global___History:
+        """Metadata about creation and changes."""
+
     def __init__(
         self,
         *,
@@ -314,6 +414,12 @@ global___UpdateProjectRequest = UpdateProjectRequest
 
 @typing.final
 class UpdateProjectResponse(google.protobuf.message.Message):
+    """*
+    UpdateProjectResponse
+    -----------------------
+    Response message for project update or creation.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     def __init__(

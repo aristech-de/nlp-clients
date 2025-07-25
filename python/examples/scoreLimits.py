@@ -14,3 +14,5 @@ response = client.score_limits(GetScoreLimitsRequest(
 ],
 ))
 print(response)
+
+client.close()

@@ -14,7 +14,11 @@ DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 
 @typing.final
 class FunctionRequest(google.protobuf.message.Message):
-    """Request for list of functions that server provides"""
+    """*
+    FunctionRequest
+    ---------------
+    Request for the list of functions provided by the server.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -26,8 +30,11 @@ global___FunctionRequest = FunctionRequest
 
 @typing.final
 class Function(google.protobuf.message.Message):
-    """A function is a specific operation or information that can be performed on
-    incoming text. I.E. Classification, recasing etc.
+    """*
+    Function
+    --------
+    Describes a specific operation that can be applied to incoming text,
+    such as classification or recasing.
     """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -37,16 +44,14 @@ class Function(google.protobuf.message.Message):
     DESCRIPTION_FIELD_NUMBER: builtins.int
     ARGUMENTS_FIELD_NUMBER: builtins.int
     id: builtins.str
-    """An unique ID for the function used (i.e. useful when using different
-    versions of a functions)
-    """
+    """Unique identifier of the function."""
     name: builtins.str
-    """An self-explaining name of the function"""
+    """Descriptive name of the function."""
     description: builtins.str
-    """A description of the function."""
+    """Detailed description of the function."""
     @property
     def arguments(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """A list of arguments for the function"""
+        """List of arguments accepted by the function."""
 
     def __init__(
         self,
@@ -62,7 +67,11 @@ global___Function = Function
 
 @typing.final
 class RunFunctionsRequest(google.protobuf.message.Message):
-    """Process raw text input."""
+    """*
+    RunFunctionsRequest
+    -------------------
+    Request to process raw text using specified functions.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -70,16 +79,14 @@ class RunFunctionsRequest(google.protobuf.message.Message):
     INPUT_FIELD_NUMBER: builtins.int
     ARGUMENTS_FIELD_NUMBER: builtins.int
     input: builtins.str
-    """The input to be processed"""
+    """The raw text to process."""
     @property
     def functions(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Function]:
-        """Function to be requested"""
+        """List of functions to apply."""
 
     @property
     def arguments(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """Arguments, if necessary. I.E. switchting between raw output and debug
-        output.
-        """
+        """Additional parameters for the functions."""
 
     def __init__(
         self,
@@ -94,11 +101,17 @@ global___RunFunctionsRequest = RunFunctionsRequest
 
 @typing.final
 class RunFunctionsResponse(google.protobuf.message.Message):
+    """*
+    RunFunctionsResponse
+    --------------------
+    Response message containing the result of text processing.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     OUTPUT_FIELD_NUMBER: builtins.int
     output: builtins.str
-    """Processed text"""
+    """The processed text result."""
     def __init__(
         self,
         *,
@@ -107,3 +120,28 @@ class RunFunctionsResponse(google.protobuf.message.Message):
     def ClearField(self, field_name: typing.Literal["output", b"output"]) -> None: ...
 
 global___RunFunctionsResponse = RunFunctionsResponse
+
+@typing.final
+class SyncDBsRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+global___SyncDBsRequest = SyncDBsRequest
+
+@typing.final
+class SyncDBsResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    STATUS_FIELD_NUMBER: builtins.int
+    status: builtins.str
+    def __init__(
+        self,
+        *,
+        status: builtins.str = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["status", b"status"]) -> None: ...
+
+global___SyncDBsResponse = SyncDBsResponse

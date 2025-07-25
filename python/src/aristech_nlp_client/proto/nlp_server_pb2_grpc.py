@@ -28,7 +28,10 @@ if _version_not_supported:
 
 
 class NLPServerStub(object):
-    """Interface exported by the server.
+    """*
+    NLPServer provides the interface for various NLP functionalities.
+    These functions include text processing, content management in projects,
+    and interaction with vectorized data structures.
     """
 
     def __init__(self, channel):
@@ -85,7 +88,7 @@ class NLPServerStub(object):
         self.GetIntents = channel.unary_stream(
                 '/aristech.nlp.NLPServer/GetIntents',
                 request_serializer=intents__pb2.GetIntentsRequest.SerializeToString,
-                response_deserializer=intents__pb2.GetIntentsResponse.FromString,
+                response_deserializer=intents__pb2.Intent.FromString,
                 _registered_method=True)
         self.GetScoreLimits = channel.unary_unary(
                 '/aristech.nlp.NLPServer/GetScoreLimits',
@@ -97,94 +100,184 @@ class NLPServerStub(object):
                 request_serializer=projects__pb2.GetEmbeddingModelsRequest.SerializeToString,
                 response_deserializer=projects__pb2.EmbeddingModel.FromString,
                 _registered_method=True)
+        self.SyncDBs = channel.unary_unary(
+                '/aristech.nlp.NLPServer/SyncDBs',
+                request_serializer=nlp__server__pb2.SyncDBsRequest.SerializeToString,
+                response_deserializer=nlp__server__pb2.SyncDBsResponse.FromString,
+                _registered_method=True)
 
 
 class NLPServerServicer(object):
-    """Interface exported by the server.
+    """*
+    NLPServer provides the interface for various NLP functionalities.
+    These functions include text processing, content management in projects,
+    and interaction with vectorized data structures.
     """
 
     def GetFunctions(self, request, context):
-        """A simple RPC.
-        returns all available processing Models.
+        """*
+        GetFunctions
+        -------------
+        Returns all available processing functions (models) of the server.
+        Each function includes a unique ID, a descriptive name,
+        a description, and a list of possible arguments.
+
+        Request: FunctionRequest
+        Response: stream Function
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def RunFunctions(self, request, context):
-        """A server-to-client streaming method
-        Returns the processed text
+        """*
+        RunFunctions
+        -------------
+        Processes the provided raw text using the specified functions.
+        Multiple functions can be applied sequentially.
+
+        Request: RunFunctionsRequest
+        - functions: List of functions to apply.
+        - input: The raw text to process.
+        - arguments: Additional parameters.
+        Response: RunFunctionsResponse (contains the processed text result)
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def UpdateContent(self, request, context):
-        """Method to add content to a vector database.
+        """*
+        UpdateContent
+        --------------
+        Adds new content or updates existing content.
+
+        Request: UpdateContentRequest
+        Response: UpdateContentResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def RemoveContent(self, request, context):
-        """Method to remove content from a vector database.
+        """*
+        RemoveContent
+        --------------
+        Removes the specified content.
+
+        Request: RemoveContentRequest
+        Response: RemoveContentResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def GetContent(self, request, context):
-        """Method to get content from a vector database.
+        """*
+        GetContent
+        ----------
+        Retrieves content that is available both as vectorized data and as plain text.
+
+        Request: GetContentRequest
+        Response: stream GetContentResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def AddProject(self, request, context):
-        """Method to initialize a project
+        """*
+        AddProject
+        -----------
+        Initializes a new project.
+
+        Request: AddProjectRequest
+        Response: AddProjectResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def RemoveProject(self, request, context):
-        """Method to remove Project
+        """*
+        RemoveProject
+        --------------
+        Removes an existing project and all associated content.
+
+        Request: RemoveProjectRequest
+        Response: RemoveProjectResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def UpdateProject(self, request, context):
-        """update the settings of a project
+        """*
+        UpdateProject
+        --------------
+        Updates the settings or configuration of an existing project.
+
+        Request: UpdateProjectRequest
+        Response: UpdateProjectResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def GetProjects(self, request, context):
-        """Method to get projects from a vector database
+        """*
+        GetProjects
+        -----------
+        Returns a list of all projects.
+
+        Request: GetProjectsRequest
+        Response: stream Project
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def GetIntents(self, request, context):
-        """Method to get intents from a project
+        """*
+        GetIntents
+        ----------
+        Retrieves all intents of a project.
+
+        Request: GetIntentsRequest
+        Response: stream Intent
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def GetScoreLimits(self, request, context):
-        """Method to get score limits for a project
+        """*
+        GetScoreLimits
+        ---------------
+        Determines score limits for a project based on test inputs.
+
+        Request: GetScoreLimitsRequest
+        Response: GetScoreLimitsResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def GetEmbeddingModels(self, request, context):
-        """get the available embedding models to be used for similarity search
+        """*
+        GetEmbeddingModels
+        -------------------
+        Returns a list of available embedding models for similarity searches.
+
+        Request: GetEmbeddingModelsRequest
+        Response: stream EmbeddingModel
         """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SyncDBs(self, request, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -240,7 +333,7 @@ def add_NLPServerServicer_to_server(servicer, server):
             'GetIntents': grpc.unary_stream_rpc_method_handler(
                     servicer.GetIntents,
                     request_deserializer=intents__pb2.GetIntentsRequest.FromString,
-                    response_serializer=intents__pb2.GetIntentsResponse.SerializeToString,
+                    response_serializer=intents__pb2.Intent.SerializeToString,
             ),
             'GetScoreLimits': grpc.unary_unary_rpc_method_handler(
                     servicer.GetScoreLimits,
@@ -252,6 +345,11 @@ def add_NLPServerServicer_to_server(servicer, server):
                     request_deserializer=projects__pb2.GetEmbeddingModelsRequest.FromString,
                     response_serializer=projects__pb2.EmbeddingModel.SerializeToString,
             ),
+            'SyncDBs': grpc.unary_unary_rpc_method_handler(
+                    servicer.SyncDBs,
+                    request_deserializer=nlp__server__pb2.SyncDBsRequest.FromString,
+                    response_serializer=nlp__server__pb2.SyncDBsResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'aristech.nlp.NLPServer', rpc_method_handlers)
@@ -261,7 +359,10 @@ def add_NLPServerServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class NLPServer(object):
-    """Interface exported by the server.
+    """*
+    NLPServer provides the interface for various NLP functionalities.
+    These functions include text processing, content management in projects,
+    and interaction with vectorized data structures.
     """
 
     @staticmethod
@@ -523,7 +624,7 @@ class NLPServer(object):
             target,
             '/aristech.nlp.NLPServer/GetIntents',
             intents__pb2.GetIntentsRequest.SerializeToString,
-            intents__pb2.GetIntentsResponse.FromString,
+            intents__pb2.Intent.FromString,
             options,
             channel_credentials,
             insecure,
@@ -578,6 +679,33 @@ class NLPServer(object):
             '/aristech.nlp.NLPServer/GetEmbeddingModels',
             projects__pb2.GetEmbeddingModelsRequest.SerializeToString,
             projects__pb2.EmbeddingModel.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SyncDBs(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/aristech.nlp.NLPServer/SyncDBs',
+            nlp__server__pb2.SyncDBsRequest.SerializeToString,
+            nlp__server__pb2.SyncDBsResponse.FromString,
             options,
             channel_credentials,
             insecure,

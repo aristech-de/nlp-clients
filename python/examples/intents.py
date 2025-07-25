@@ -7,3 +7,5 @@ intents = client.list_intents(GetIntentsRequest(
 ))
 for intent in intents:
     print(intent)
+
+client.close()

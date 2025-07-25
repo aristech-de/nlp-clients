@@ -5,3 +5,5 @@ client = NlpClient(host=host, ssl=ssl, root_cert=root_cert, auth_token=auth_toke
 functions = client.list_functions()
 for function in functions:
     print(function)
+
+client.close()

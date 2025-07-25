@@ -1,5 +1,7 @@
 #!/bin/bash
-SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+# Get the directory of the script
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+echo "Compiling .proto files to Python in directory: $SCRIPT_DIR"
 
 # This script converts the protocol buffer files to python
 OUT_DIR="$SCRIPT_DIR/src/aristech_nlp_client/proto"
@@ -37,6 +39,7 @@ sed -i '' 's/import intents_pb2 as intents__pb2/from . import intents_pb2 as int
 
 sed -i '' 's/import projects_pb2 as projects__pb2/from . import projects_pb2 as projects__pb2/g' ${OUT_DIR}/projects_pb2_grpc.py
 sed -i '' 's/import intents_pb2 as intents__pb2/from . import intents_pb2 as intents__pb2/g' ${OUT_DIR}/intents_pb2_grpc.py
+sed -i '' 's/import projects_pb2 as projects__pb2/from . import projects_pb2 as projects__pb2/g' ${OUT_DIR}/intents_pb2.py
 
 # Copy the __init__.py file to the generated directory
 touch ${OUT_DIR}/__init__.py

@@ -9,6 +9,7 @@ import google.protobuf.descriptor
 import google.protobuf.internal.containers
 import google.protobuf.internal.enum_type_wrapper
 import google.protobuf.message
+import projects_pb2
 import sys
 import typing
 
@@ -20,23 +21,83 @@ else:
 DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 
 @typing.final
-class Intent(google.protobuf.message.Message):
+class OutputMessage(google.protobuf.message.Message):
+    """*
+    OutputMessage
+    -------------
+    Describes a single response of an intent.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
-    class _InputType:
+    class _Channel:
         ValueType = typing.NewType("ValueType", builtins.int)
         V: typing_extensions.TypeAlias = ValueType
 
-    class _InputTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Intent._InputType.ValueType], builtins.type):
+    class _ChannelEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[OutputMessage._Channel.ValueType], builtins.type):
         DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
-        CHAT: Intent._InputType.ValueType  # 0
-        MAIL: Intent._InputType.ValueType  # 1
-        VOICE: Intent._InputType.ValueType  # 2
+        CHAT: OutputMessage._Channel.ValueType  # 0
+        """Text chat"""
+        VOICE: OutputMessage._Channel.ValueType  # 1
+        """Voice channel"""
+        EMAIL: OutputMessage._Channel.ValueType  # 2
+        """Email"""
 
-    class InputType(_InputType, metaclass=_InputTypeEnumTypeWrapper): ...
-    CHAT: Intent.InputType.ValueType  # 0
-    MAIL: Intent.InputType.ValueType  # 1
-    VOICE: Intent.InputType.ValueType  # 2
+    class Channel(_Channel, metaclass=_ChannelEnumTypeWrapper): ...
+    CHAT: OutputMessage.Channel.ValueType  # 0
+    """Text chat"""
+    VOICE: OutputMessage.Channel.ValueType  # 1
+    """Voice channel"""
+    EMAIL: OutputMessage.Channel.ValueType  # 2
+    """Email"""
+
+    @typing.final
+    class DataEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        value: builtins.str
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: builtins.str = ...,
+        ) -> None: ...
+        def ClearField(self, field_name: typing.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    CHANNEL_FIELD_NUMBER: builtins.int
+    DATA_FIELD_NUMBER: builtins.int
+    channel: global___OutputMessage.Channel.ValueType
+    """Channel through which the message is delivered."""
+    @property
+    def data(self) -> google.protobuf.internal.containers.ScalarMap[builtins.str, builtins.str]:
+        """Flexible key/value pairs for message data.
+        Example: "text": "Hello, how can I help?"
+                 "redirect": "intent_123"
+                 "tts_speed": "slow"
+        """
+
+    def __init__(
+        self,
+        *,
+        channel: global___OutputMessage.Channel.ValueType = ...,
+        data: collections.abc.Mapping[builtins.str, builtins.str] | None = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["channel", b"channel", "data", b"data"]) -> None: ...
+
+global___OutputMessage = OutputMessage
+
+@typing.final
+class Intent(google.protobuf.message.Message):
+    """*
+    Intent
+    ------
+    Represents an intent within a project.
+    """
+
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     ID_FIELD_NUMBER: builtins.int
     PROJECT_ID_FIELD_NUMBER: builtins.int
@@ -46,51 +107,49 @@ class Intent(google.protobuf.message.Message):
     OUTPUT_CHAT_FIELD_NUMBER: builtins.int
     OUTPUT_VOICE_FIELD_NUMBER: builtins.int
     OUTPUT_EMAIL_FIELD_NUMBER: builtins.int
+    OUTPUTS_FIELD_NUMBER: builtins.int
     RELATED_TO_FIELD_NUMBER: builtins.int
     PUBLISHED_FIELD_NUMBER: builtins.int
-    TYPE_FIELD_NUMBER: builtins.int
     EXCLUDE_OUTPUT_FROM_SEARCH_FIELD_NUMBER: builtins.int
     KEYWORDS_FIELD_NUMBER: builtins.int
     CREATOR_ID_FIELD_NUMBER: builtins.int
     id: builtins.str
-    """ID of the intent"""
+    """Unique ID of the intent."""
     project_id: builtins.str
-    """The project ID of the intent"""
+    """Project ID to which this intent belongs."""
     locale: builtins.str
-    """The default locale for the intent's inputs and outputs"""
+    """Default locale for input and output."""
     topic: builtins.str
-    """Topic of the intent"""
+    """Topic assignment of the intent."""
     published: builtins.bool
-    """If the intent is a draft"""
-    type: global___Intent.InputType.ValueType
-    """Type of the intents inputs"""
+    """Indicates whether the intent is published (not a draft)."""
     exclude_output_from_search: builtins.bool
+    """If true, the output of this intent is excluded from search queries."""
     creator_id: builtins.str
+    """ID of the creator of this intent."""
     @property
     def inputs(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___IntentInput]:
-        """Inputs for the intent"""
+        """List of inputs (IntentInput) assigned to this intent."""
 
     @property
     def output_chat(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """Possible chat outputs for the intent"""
+        """Old, channel-separated outputs (still present)."""
 
     @property
-    def output_voice(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """Possible voice outputs for the intent
-        This is usually a JSON string with key value pairs e.g. {"extension": "1234", "text": "I will redirect you to the support team"}
-        """
-
+    def output_voice(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
     @property
-    def output_email(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """Possible email outputs for the intent"""
+    def output_email(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    @property
+    def outputs(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___OutputMessage]:
+        """New, extensible outputs."""
 
     @property
     def related_to(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Relation]:
-        """relation to other intents"""
+        """Relationships to other intents (parents, children, peers)."""
 
     @property
     def keywords(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Keyword]:
-        """List of keywords to force finding this intent"""
+        """List of keywords for targeted search."""
 
     def __init__(
         self,
@@ -103,22 +162,24 @@ class Intent(google.protobuf.message.Message):
         output_chat: collections.abc.Iterable[builtins.str] | None = ...,
         output_voice: collections.abc.Iterable[builtins.str] | None = ...,
         output_email: collections.abc.Iterable[builtins.str] | None = ...,
+        outputs: collections.abc.Iterable[global___OutputMessage] | None = ...,
         related_to: collections.abc.Iterable[global___Relation] | None = ...,
         published: builtins.bool = ...,
-        type: global___Intent.InputType.ValueType = ...,
         exclude_output_from_search: builtins.bool = ...,
         keywords: collections.abc.Iterable[global___Keyword] | None = ...,
         creator_id: builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["creator_id", b"creator_id", "exclude_output_from_search", b"exclude_output_from_search", "id", b"id", "inputs", b"inputs", "keywords", b"keywords", "locale", b"locale", "output_chat", b"output_chat", "output_email", b"output_email", "output_voice", b"output_voice", "project_id", b"project_id", "published", b"published", "related_to", b"related_to", "topic", b"topic", "type", b"type"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["creator_id", b"creator_id", "exclude_output_from_search", b"exclude_output_from_search", "id", b"id", "inputs", b"inputs", "keywords", b"keywords", "locale", b"locale", "output_chat", b"output_chat", "output_email", b"output_email", "output_voice", b"output_voice", "outputs", b"outputs", "project_id", b"project_id", "published", b"published", "related_to", b"related_to", "topic", b"topic"]) -> None: ...
 
 global___Intent = Intent
 
 @typing.final
 class IntentInput(google.protobuf.message.Message):
-    """a type defining an input and its mapping to a uuid. if the uuid is set, the input gets edited
-    to the new input, if no id is set or the uuid does not exist, a new input is added to the 
-    intent.
+    """*
+    IntentInput
+    -----------
+    Defines an input for an intent.
+    Each input can be identified by UUID; if it does not exist, a new input is created.
     """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -126,7 +187,9 @@ class IntentInput(google.protobuf.message.Message):
     UUID_FIELD_NUMBER: builtins.int
     INPUT_FIELD_NUMBER: builtins.int
     uuid: builtins.str
+    """UUID for identification."""
     input: builtins.str
+    """The actual input text."""
     def __init__(
         self,
         *,
@@ -139,6 +202,10 @@ global___IntentInput = IntentInput
 
 @typing.final
 class Relation(google.protobuf.message.Message):
+    """*
+    Relation
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     PARENTS_FIELD_NUMBER: builtins.int
@@ -146,15 +213,15 @@ class Relation(google.protobuf.message.Message):
     PEERS_FIELD_NUMBER: builtins.int
     @property
     def parents(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """list of ids of  parent intents"""
+        """Parents are intents that are directly related to this intent."""
 
     @property
     def children(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """list of ids of  child intents"""
+        """Children are intents that are directly related to this intent."""
 
     @property
     def peers(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """list of ids of same level intents"""
+        """Peers are intents that are at the same level in the hierarchy."""
 
     def __init__(
         self,
@@ -169,14 +236,20 @@ global___Relation = Relation
 
 @typing.final
 class Keyword(google.protobuf.message.Message):
+    """*
+    Keyword
+    -------
+    Represents a keyword for identification or prioritization of an intent.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     KEYWORD_FIELD_NUMBER: builtins.int
     PRIORITY_FIELD_NUMBER: builtins.int
     keyword: builtins.str
-    """a keyword for an intent"""
+    """The keyword."""
     priority: builtins.int
-    """the priority for the keyword"""
+    """Priority (e.g. for ranking)."""
     def __init__(
         self,
         *,
@@ -189,17 +262,19 @@ global___Keyword = Keyword
 
 @typing.final
 class UpdateContentRequest(google.protobuf.message.Message):
-    """Adds or updates content to the vector database
-    if id of the intent is not set, a new intent is created for the project
-    if an id is set: first check if that id already exists and update it
-    if the id doesn't exist: create the intent with the given id.
+    """*
+    UpdateContentRequest
+    --------------------
+    Used to add or update intents.
     """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     INTENTS_FIELD_NUMBER: builtins.int
     @property
-    def intents(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Intent]: ...
+    def intents(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Intent]:
+        """Intents to add or update."""
+
     def __init__(
         self,
         *,
@@ -211,14 +286,18 @@ global___UpdateContentRequest = UpdateContentRequest
 
 @typing.final
 class UpdateContentResponse(google.protobuf.message.Message):
-    """Response for add content"""
+    """*
+    UpdateContentResponse
+    ---------------------
+    Contains the status of the update operation.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     INTENT_IDS_FIELD_NUMBER: builtins.int
     @property
     def intent_ids(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """Status of the update"""
+        """IDs of added or updated intents."""
 
     def __init__(
         self,
@@ -231,17 +310,21 @@ global___UpdateContentResponse = UpdateContentResponse
 
 @typing.final
 class RemoveContentRequest(google.protobuf.message.Message):
-    """Removes content from the vector database"""
+    """*
+    RemoveContentRequest
+    --------------------
+    Used to remove intents.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     ID_FIELD_NUMBER: builtins.int
     PROJECT_ID_FIELD_NUMBER: builtins.int
     project_id: builtins.str
-    """"""
+    """Project from which to delete."""
     @property
     def id(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """ID of the Document to be removed"""
+        """IDs of intents to delete."""
 
     def __init__(
         self,
@@ -255,7 +338,7 @@ global___RemoveContentRequest = RemoveContentRequest
 
 @typing.final
 class RemoveContentResponse(google.protobuf.message.Message):
-    """Response for remove content"""
+    """* Confirms removal of intents."""
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -267,7 +350,11 @@ global___RemoveContentResponse = RemoveContentResponse
 
 @typing.final
 class GetContentRequest(google.protobuf.message.Message):
-    """Request for content"""
+    """*
+    GetContentRequest
+    -----------------
+    Retrieves content (intents) and performs similarity searches.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -278,19 +365,12 @@ class GetContentRequest(google.protobuf.message.Message):
     FILTERS_FIELD_NUMBER: builtins.int
     CHAT_ID_FIELD_NUMBER: builtins.int
     prompt: builtins.str
-    """Prompt for the content to be retrieved"""
     project_id: builtins.str
-    """Meta data for the content to be retrieved"""
     num_results: builtins.int
-    """The number of results to be returned"""
     threshold: builtins.float
-    """The threshold for the results to be returned"""
     chat_id: builtins.str
-    """Chat id for context"""
     @property
-    def filters(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___ContentFilter]:
-        """Content Filters"""
-
+    def filters(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___ContentFilter]: ...
     def __init__(
         self,
         *,
@@ -307,18 +387,19 @@ global___GetContentRequest = GetContentRequest
 
 @typing.final
 class GetContentResponse(google.protobuf.message.Message):
-    """Response for content"""
+    """*
+    GetContentResponse
+    ------------------
+    Response to a content query.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     ITEMS_FIELD_NUMBER: builtins.int
     CHAT_ID_FIELD_NUMBER: builtins.int
     chat_id: builtins.str
-    """The Chat ID that was sent to the server with the get content request"""
     @property
-    def items(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___ContentResponseItem]:
-        """List of intents"""
-
+    def items(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___ContentResponseItem]: ...
     def __init__(
         self,
         *,
@@ -331,6 +412,12 @@ global___GetContentResponse = GetContentResponse
 
 @typing.final
 class ContentFilter(google.protobuf.message.Message):
+    """*
+    ContentFilter
+    -------------
+    Defines filter criteria for content queries.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     FIELD_FIELD_NUMBER: builtins.int
@@ -338,15 +425,10 @@ class ContentFilter(google.protobuf.message.Message):
     OPERATOR_FIELD_NUMBER: builtins.int
     LABEL_FIELD_NUMBER: builtins.int
     field: builtins.str
-    """The field to be filtered"""
     value: builtins.str
-    """The value to be filtered"""
     operator: builtins.str
-    """Operator"""
     @property
-    def label(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """The label to be used for filtering"""
-
+    def label(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
     def __init__(
         self,
         *,
@@ -361,7 +443,11 @@ global___ContentFilter = ContentFilter
 
 @typing.final
 class ContentResponseItem(google.protobuf.message.Message):
-    """Response item for content"""
+    """*
+    ContentResponseItem
+    -------------------
+    A single search result.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -369,16 +455,19 @@ class ContentResponseItem(google.protobuf.message.Message):
     SCORE_FIELD_NUMBER: builtins.int
     INTENT_FIELD_NUMBER: builtins.int
     FALLBACK_MESSAGE_FIELD_NUMBER: builtins.int
+    FALLBACK_MESSAGES_FIELD_NUMBER: builtins.int
     id: builtins.str
-    """Id of the intent's input that represents this match"""
+    """ID of the matching IntentInput element."""
     score: builtins.float
-    """Score of the content"""
+    """Similarity/relevance score."""
     fallback_message: builtins.str
-    """fallbackmessage, gets set, when no intent was found in the search"""
+    """A single fallback message as a string"""
     @property
     def intent(self) -> global___Intent:
-        """The actual intent"""
+        """Full intent."""
 
+    @property
+    def fallback_messages(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[projects_pb2.FallbackMessage]: ...
     def __init__(
         self,
         *,
@@ -386,14 +475,21 @@ class ContentResponseItem(google.protobuf.message.Message):
         score: builtins.float = ...,
         intent: global___Intent | None = ...,
         fallback_message: builtins.str = ...,
+        fallback_messages: collections.abc.Iterable[projects_pb2.FallbackMessage] | None = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["intent", b"intent"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["fallback_message", b"fallback_message", "id", b"id", "intent", b"intent", "score", b"score"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["fallback_message", b"fallback_message", "fallback_messages", b"fallback_messages", "id", b"id", "intent", b"intent", "score", b"score"]) -> None: ...
 
 global___ContentResponseItem = ContentResponseItem
 
 @typing.final
 class GetIntentsRequest(google.protobuf.message.Message):
+    """*
+    GetIntentsRequest
+    -----------------
+    Requests all intents of a specific project.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     PROJECT_ID_FIELD_NUMBER: builtins.int
@@ -408,38 +504,23 @@ class GetIntentsRequest(google.protobuf.message.Message):
 global___GetIntentsRequest = GetIntentsRequest
 
 @typing.final
-class GetIntentsResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
-
-    INTENT_FIELD_NUMBER: builtins.int
-    @property
-    def intent(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Intent]: ...
-    def __init__(
-        self,
-        *,
-        intent: collections.abc.Iterable[global___Intent] | None = ...,
-    ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["intent", b"intent"]) -> None: ...
-
-global___GetIntentsResponse = GetIntentsResponse
-
-@typing.final
 class GetScoreLimitsRequest(google.protobuf.message.Message):
+    """*
+    GetScoreLimitsRequest
+    ---------------------
+    Determines score limits for a project.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     PROJECT_ID_FIELD_NUMBER: builtins.int
     TEST_SENTENCES_UPPER_LIMIT_FIELD_NUMBER: builtins.int
     TEST_SENTENCES_LOWER_LIMIT_FIELD_NUMBER: builtins.int
     project_id: builtins.str
-    """ID of the project to get the score Limits from"""
     @property
-    def test_sentences_upper_limit(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """List of sentences to test for the upper limit"""
-
+    def test_sentences_upper_limit(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
     @property
-    def test_sentences_lower_limit(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """List of sentences to test for the lower limit"""
-
+    def test_sentences_lower_limit(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
     def __init__(
         self,
         *,
@@ -453,16 +534,18 @@ global___GetScoreLimitsRequest = GetScoreLimitsRequest
 
 @typing.final
 class GetScoreLimitsResponse(google.protobuf.message.Message):
+    """*
+    GetScoreLimitsResponse
+    ----------------------
+    Returns the determined score limits for a project.
+    """
+
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     MIN_THRESHOLD_FIELD_NUMBER: builtins.int
     MAX_THRESHOLD_FIELD_NUMBER: builtins.int
     min_threshold: builtins.float
-    """The minimum threshold determined by random sentences"""
     max_threshold: builtins.float
-    """The max threshold determined by using original input sentences for the
-    intents
-    """
     def __init__(
         self,
         *,
