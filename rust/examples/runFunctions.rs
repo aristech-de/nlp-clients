@@ -22,7 +22,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         RunFunctionsRequest {
             input: "hello world".to_string(),
             functions: vec![Function {
-                id: "spellcheck-de".to_string(),
+                id: "spell".to_string(),
                 ..Function::default()
             }],
             ..RunFunctionsRequest::default()

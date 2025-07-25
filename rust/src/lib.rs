@@ -14,13 +14,15 @@ use std::error::Error;
 use nlp_service::nlp_server_client::NlpServerClient;
 use nlp_service::{
     Function, FunctionRequest, GetContentRequest, GetContentResponse, GetIntentsRequest,
-    GetIntentsResponse, GetProjectsRequest, GetScoreLimitsRequest, GetScoreLimitsResponse, Project,
+    GetProjectsRequest, GetScoreLimitsRequest, GetScoreLimitsResponse, Project,
     RemoveContentRequest, RemoveContentResponse, RunFunctionsRequest, RunFunctionsResponse,
     UpdateContentRequest, UpdateContentResponse,
 };
 use tonic::codegen::InterceptedService;
 use tonic::service::Interceptor;
 use tonic::transport::{Certificate, Channel, ClientTlsConfig};
+
+use crate::nlp_service::Intent;
 
 /// The Auth struct holds the token and secret needed to authenticate with the server.
 #[derive(Clone, Debug)]
@@ -270,7 +272,7 @@ pub async fn list_projects(
 pub async fn get_intents(
     client: &mut NlpClient,
     request: GetIntentsRequest,
-) -> Result<Vec<GetIntentsResponse>, Box<dyn Error>> {
+) -> Result<Vec<Intent>, Box<dyn Error>> {
     let response = client.get_intents(request).await?;
     let mut stream = response.into_inner();
     let mut intents = vec![];
