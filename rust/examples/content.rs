@@ -17,7 +17,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         &mut client,
         GetContentRequest {
             prompt: "What are the lottery numbers?".to_string(),
-            threshold: 0.5,
+            threshold: 0.9,
             num_results: 3,
             project_id: std::env::var("PROJECT_ID")?,
             ..GetContentRequest::default()
@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     )
     .await?;
     for response in responses {
-        println!("{:?}", response.items);
+        println!("{:#?}", response.items);
     }
 
     // Update content:

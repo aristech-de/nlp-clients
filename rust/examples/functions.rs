@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let functions = list_functions(&mut client, None).await?;
     for function in functions {
-        println!("{:?}", function);
+        println!("{:#?}", function);
     }
     Ok(())
 }

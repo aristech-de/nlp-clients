@@ -6,11 +6,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let intents_proto = format!("{}/intents.proto", protos_dir);
     let services_proto = format!("{}/nlp_server.proto", protos_dir);
 
-    tonic_build::configure()
+    tonic_prost_build::configure()
         .build_server(false)
         .compile_protos(
             &[&projects_proto, &intents_proto, &services_proto],
-            &[protos_dir],
+            &[&protos_dir.to_string()],
         )?;
 
     println!("cargo:rerun-if-changed={}", projects_proto);
