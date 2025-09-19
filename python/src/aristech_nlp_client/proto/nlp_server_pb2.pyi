@@ -15,8 +15,6 @@ DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 @typing.final
 class FunctionRequest(google.protobuf.message.Message):
     """*
-    FunctionRequest
-    ---------------
     Request for the list of functions provided by the server.
     """
 
@@ -31,8 +29,6 @@ global___FunctionRequest = FunctionRequest
 @typing.final
 class Function(google.protobuf.message.Message):
     """*
-    Function
-    --------
     Describes a specific operation that can be applied to incoming text,
     such as classification or recasing.
     """
@@ -68,8 +64,6 @@ global___Function = Function
 @typing.final
 class RunFunctionsRequest(google.protobuf.message.Message):
     """*
-    RunFunctionsRequest
-    -------------------
     Request to process raw text using specified functions.
     """
 
@@ -102,8 +96,6 @@ global___RunFunctionsRequest = RunFunctionsRequest
 @typing.final
 class RunFunctionsResponse(google.protobuf.message.Message):
     """*
-    RunFunctionsResponse
-    --------------------
     Response message containing the result of text processing.
     """
 

@@ -26,8 +26,6 @@ class GetProjectsRequest(google.protobuf.message.Message):
     Projects contain configurations and metadata.
 
     *
-    GetProjectsRequest
-    ------------------
     Empty request to retrieve all projects.
     """
 
@@ -42,8 +40,6 @@ global___GetProjectsRequest = GetProjectsRequest
 @typing.final
 class Project(google.protobuf.message.Message):
     """*
-    Project
-    -------
     A project represents a collection of intents.
     """
 
@@ -68,8 +64,6 @@ global___Project = Project
 @typing.final
 class AddProjectRequest(google.protobuf.message.Message):
     """*
-    AddProjectRequest
-    ------------------
     Request to add a new project.
     """
 
@@ -137,8 +131,6 @@ global___AddProjectRequest = AddProjectRequest
 @typing.final
 class FallbackMessage(google.protobuf.message.Message):
     """*
-    FallbackMessage
-    ---------------
     Represents a fallback message used when no direct answer or match is found.
     """
 
@@ -200,8 +192,6 @@ global___FallbackMessage = FallbackMessage
 @typing.final
 class History(google.protobuf.message.Message):
     """*
-    History
-    -------
     Stores metadata about the history of a project.
     """
 
@@ -234,8 +224,6 @@ global___History = History
 @typing.final
 class AddProjectResponse(google.protobuf.message.Message):
     """*
-    AddProjectResponse
-    ------------------
     Response message for project creation.
     """
 
@@ -256,8 +244,6 @@ global___AddProjectResponse = AddProjectResponse
 @typing.final
 class RemoveProjectRequest(google.protobuf.message.Message):
     """*
-    RemoveProjectRequest
-    ----------------------
     Request to remove a project.
     """
 
@@ -278,8 +264,6 @@ global___RemoveProjectRequest = RemoveProjectRequest
 @typing.final
 class RemoveProjectResponse(google.protobuf.message.Message):
     """*
-    RemoveProjectResponse
-    -----------------------
     Response message for project removal.
     """
 
@@ -294,8 +278,6 @@ global___RemoveProjectResponse = RemoveProjectResponse
 @typing.final
 class GetEmbeddingModelsRequest(google.protobuf.message.Message):
     """*
-    GetEmbeddingModelsRequest
-    --------------------------
     Request to retrieve all available embedding models.
     """
 
@@ -310,8 +292,6 @@ global___GetEmbeddingModelsRequest = GetEmbeddingModelsRequest
 @typing.final
 class EmbeddingModel(google.protobuf.message.Message):
     """*
-    EmbeddingModel
-    --------------
     Represents a model for vectorizing content.
     """
 
@@ -346,8 +326,6 @@ global___EmbeddingModel = EmbeddingModel
 @typing.final
 class UpdateProjectRequest(google.protobuf.message.Message):
     """*
-    UpdateProjectRequest
-    ----------------------
     Request to update an existing project or create a new one if no project_id is provided.
     """
 
@@ -415,8 +393,6 @@ global___UpdateProjectRequest = UpdateProjectRequest
 @typing.final
 class UpdateProjectResponse(google.protobuf.message.Message):
     """*
-    UpdateProjectResponse
-    -----------------------
     Response message for project update or creation.
     """
 

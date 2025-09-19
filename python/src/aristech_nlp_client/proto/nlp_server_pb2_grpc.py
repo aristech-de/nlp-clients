@@ -105,6 +105,11 @@ class NLPServerStub(object):
                 request_serializer=nlp__server__pb2.SyncDBsRequest.SerializeToString,
                 response_deserializer=nlp__server__pb2.SyncDBsResponse.FromString,
                 _registered_method=True)
+        self.GetKeywords = channel.unary_stream(
+                '/aristech.nlp.NLPServer/GetKeywords',
+                request_serializer=intents__pb2.GetKeywordsRequest.SerializeToString,
+                response_deserializer=intents__pb2.GetKeywordsResponse.FromString,
+                _registered_method=True)
 
 
 class NLPServerServicer(object):
@@ -116,14 +121,9 @@ class NLPServerServicer(object):
 
     def GetFunctions(self, request, context):
         """*
-        GetFunctions
-        -------------
         Returns all available processing functions (models) of the server.
         Each function includes a unique ID, a descriptive name,
         a description, and a list of possible arguments.
-
-        Request: FunctionRequest
-        Response: stream Function
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -131,16 +131,8 @@ class NLPServerServicer(object):
 
     def RunFunctions(self, request, context):
         """*
-        RunFunctions
-        -------------
         Processes the provided raw text using the specified functions.
         Multiple functions can be applied sequentially.
-
-        Request: RunFunctionsRequest
-        - functions: List of functions to apply.
-        - input: The raw text to process.
-        - arguments: Additional parameters.
-        Response: RunFunctionsResponse (contains the processed text result)
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -148,12 +140,7 @@ class NLPServerServicer(object):
 
     def UpdateContent(self, request, context):
         """*
-        UpdateContent
-        --------------
         Adds new content or updates existing content.
-
-        Request: UpdateContentRequest
-        Response: UpdateContentResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -161,12 +148,7 @@ class NLPServerServicer(object):
 
     def RemoveContent(self, request, context):
         """*
-        RemoveContent
-        --------------
         Removes the specified content.
-
-        Request: RemoveContentRequest
-        Response: RemoveContentResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -174,12 +156,7 @@ class NLPServerServicer(object):
 
     def GetContent(self, request, context):
         """*
-        GetContent
-        ----------
         Retrieves content that is available both as vectorized data and as plain text.
-
-        Request: GetContentRequest
-        Response: stream GetContentResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -187,12 +164,7 @@ class NLPServerServicer(object):
 
     def AddProject(self, request, context):
         """*
-        AddProject
-        -----------
         Initializes a new project.
-
-        Request: AddProjectRequest
-        Response: AddProjectResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -200,12 +172,7 @@ class NLPServerServicer(object):
 
     def RemoveProject(self, request, context):
         """*
-        RemoveProject
-        --------------
         Removes an existing project and all associated content.
-
-        Request: RemoveProjectRequest
-        Response: RemoveProjectResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -213,12 +180,7 @@ class NLPServerServicer(object):
 
     def UpdateProject(self, request, context):
         """*
-        UpdateProject
-        --------------
         Updates the settings or configuration of an existing project.
-
-        Request: UpdateProjectRequest
-        Response: UpdateProjectResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -226,12 +188,7 @@ class NLPServerServicer(object):
 
     def GetProjects(self, request, context):
         """*
-        GetProjects
-        -----------
         Returns a list of all projects.
-
-        Request: GetProjectsRequest
-        Response: stream Project
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -239,12 +196,7 @@ class NLPServerServicer(object):
 
     def GetIntents(self, request, context):
         """*
-        GetIntents
-        ----------
         Retrieves all intents of a project.
-
-        Request: GetIntentsRequest
-        Response: stream Intent
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -252,12 +204,7 @@ class NLPServerServicer(object):
 
     def GetScoreLimits(self, request, context):
         """*
-        GetScoreLimits
-        ---------------
         Determines score limits for a project based on test inputs.
-
-        Request: GetScoreLimitsRequest
-        Response: GetScoreLimitsResponse
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -265,18 +212,19 @@ class NLPServerServicer(object):
 
     def GetEmbeddingModels(self, request, context):
         """*
-        GetEmbeddingModels
-        -------------------
         Returns a list of available embedding models for similarity searches.
-
-        Request: GetEmbeddingModelsRequest
-        Response: stream EmbeddingModel
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def SyncDBs(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetKeywords(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -349,6 +297,11 @@ def add_NLPServerServicer_to_server(servicer, server):
                     servicer.SyncDBs,
                     request_deserializer=nlp__server__pb2.SyncDBsRequest.FromString,
                     response_serializer=nlp__server__pb2.SyncDBsResponse.SerializeToString,
+            ),
+            'GetKeywords': grpc.unary_stream_rpc_method_handler(
+                    servicer.GetKeywords,
+                    request_deserializer=intents__pb2.GetKeywordsRequest.FromString,
+                    response_serializer=intents__pb2.GetKeywordsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -706,6 +659,33 @@ class NLPServer(object):
             '/aristech.nlp.NLPServer/SyncDBs',
             nlp__server__pb2.SyncDBsRequest.SerializeToString,
             nlp__server__pb2.SyncDBsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetKeywords(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/aristech.nlp.NLPServer/GetKeywords',
+            intents__pb2.GetKeywordsRequest.SerializeToString,
+            intents__pb2.GetKeywordsResponse.FromString,
             options,
             channel_credentials,
             insecure,

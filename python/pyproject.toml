@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aristech-nlp-client"
-version = "2.0.0"
+version = "2.1.0"
 description = "A Python client library for the Aristech Natural-Language-Processing API."
 authors = [{ name = "Martin Mende", email = "speech@aristech.de" }]
 dependencies = [
