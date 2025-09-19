@@ -8,6 +8,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     tonic_prost_build::configure()
         .build_server(false)
+        .protoc_arg("--experimental_allow_proto3_optional")
         .compile_protos(
             &[&projects_proto, &intents_proto, &services_proto],
             &[&protos_dir.to_string()],

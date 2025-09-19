@@ -1,5 +1,8 @@
 # Changelog
 
+## Rust v3.0.1
+- Added `--experimental_allow_proto3_optional` to the protobuf compiler arguments to fix issues with optional fields.
+
 ## Rust v3.0.0
 - 🔥 **BREAKING** If you didn't create `GetContentRequest` by spreading default (as in the content example) you must specify the new field `include_unpublished_intents` as well now.
 - 🔥 **BREAKING** The field `GetContentRequest.threshold` is explcitly marked as optional now so it has to be set to `Some(f32)` (or `None`) instead of `f32` now.
