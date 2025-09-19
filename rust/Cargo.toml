@@ -1,7 +1,7 @@
 [package]
 name = "aristech-nlp-client"
 description = "A Rust client library for the Aristech Natrual Language Processing API"
-version = "2.0.1"
+version = "3.0.0"
 edition = "2021"
 repository = "https://github.com/aristech-de/nlp-clients"
 keywords = ["nlp", "real-time", "streaming", "client-library"]
@@ -11,14 +11,14 @@ license = "MIT"
 categories = ["api-bindings"]
 
 [dependencies]
-tonic = { version = "0.14.1", features = [
+tonic = { version = "0.14.2", features = [
   "tls-ring",
   "tls-native-roots",
   "gzip",
 ] }
 tokio = { version = "1.47.1", features = ["macros", "rt-multi-thread"] }
 tokio-stream = "0.1.17"
-tonic-prost = "0.14.1"
+tonic-prost = "0.14.2"
 prost = "0.14.1"
 prost-types = "0.14.1"
 
@@ -26,7 +26,7 @@ prost-types = "0.14.1"
 dotenv = "0.15.0"
 
 [build-dependencies]
-tonic-prost-build = "0.14.1"
+tonic-prost-build = "0.14.2"
 
 [[example]]
 name = "functions"

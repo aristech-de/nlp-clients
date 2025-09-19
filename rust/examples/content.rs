@@ -9,6 +9,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Load environment variables from .env file
     dotenv::dotenv().ok();
 
+    // Use the first argument or a default prompt
+    let prompt = std::env::args()
+        .nth(1)
+        .unwrap_or_else(|| "What are the lottery numbers?".to_string());
+
     let host = std::env::var("HOST")?;
     let tls_options = get_tls_options()?;
     let mut client = get_client(host, tls_options).await?;
@@ -16,8 +21,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let responses = get_content(
         &mut client,
         GetContentRequest {
-            prompt: "What are the lottery numbers?".to_string(),
-            threshold: 0.9,
+            prompt,
+            // Since v3.0.0 the threshold field is optional.
+            // To use the project's default threshold set it to None.
+            threshold: Some(0.9),
             num_results: 3,
             project_id: std::env::var("PROJECT_ID")?,
             ..GetContentRequest::default()
