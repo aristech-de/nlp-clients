@@ -13,15 +13,11 @@ package aristech.nlp;
  */
 
 /**
- * GetProjectsRequest
- * ------------------
  * Empty request to retrieve all projects.
  */
 message GetProjectsRequest {}
 
 /**
- * Project
- * -------
  * A project represents a collection of intents.
  */
 message Project {
@@ -32,8 +28,6 @@ message Project {
 }
 
 /**
- * AddProjectRequest
- * ------------------
  * Request to add a new project.
  */
 message AddProjectRequest {
@@ -62,8 +56,6 @@ message AddProjectRequest {
 }
 
 /**
- * FallbackMessage
- * ---------------
  * Represents a fallback message used when no direct answer or match is found.
  */
 message FallbackMessage {
@@ -81,8 +73,6 @@ message FallbackMessage {
 }
 
 /**
- * History
- * -------
  * Stores metadata about the history of a project.
  */
 message History {
@@ -97,8 +87,6 @@ message History {
 }
 
 /**
- * AddProjectResponse
- * ------------------
  * Response message for project creation.
  */
 message AddProjectResponse {
@@ -107,8 +95,6 @@ message AddProjectResponse {
 }
 
 /**
- * RemoveProjectRequest
- * ----------------------
  * Request to remove a project.
  */
 message RemoveProjectRequest {
@@ -117,22 +103,16 @@ message RemoveProjectRequest {
 }
 
 /**
- * RemoveProjectResponse
- * -----------------------
  * Response message for project removal.
  */
 message RemoveProjectResponse {}
 
 /**
- * GetEmbeddingModelsRequest
- * --------------------------
  * Request to retrieve all available embedding models.
  */
 message GetEmbeddingModelsRequest {}
 
 /**
- * EmbeddingModel
- * --------------
  * Represents a model for vectorizing content.
  */
 message EmbeddingModel {
@@ -147,8 +127,6 @@ message EmbeddingModel {
 }
 
 /**
- * UpdateProjectRequest
- * ----------------------
  * Request to update an existing project or create a new one if no project_id is provided.
  */
 message UpdateProjectRequest {
@@ -177,8 +155,6 @@ message UpdateProjectRequest {
 }
 
 /**
- * UpdateProjectResponse
- * -----------------------
  * Response message for project update or creation.
  */
 message UpdateProjectResponse {}

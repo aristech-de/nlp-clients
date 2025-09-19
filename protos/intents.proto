@@ -8,15 +8,13 @@ import "projects.proto";
 package aristech.nlp;
 
 /**
- * OutputMessage
- * -------------
  * Describes a single response of an intent.
  */
 message OutputMessage {
   enum Channel {
-    CHAT                 = 0; // Text chat
-    VOICE                = 1; // Voice channel
-    EMAIL                = 2; // Email
+    CHAT  = 0;
+    VOICE = 1;
+    EMAIL = 2;
   }
   // Channel through which the message is delivered.
   Channel channel = 1;
@@ -28,8 +26,6 @@ message OutputMessage {
 }
 
 /**
- * Intent
- * ------
  * Represents an intent within a project.
  */
 message Intent {
@@ -68,8 +64,6 @@ message Intent {
 }
 
 /**
- * IntentInput
- * -----------
  * Defines an input for an intent.
  * Each input can be identified by UUID; if it does not exist, a new input is created.
  */
@@ -93,8 +87,6 @@ message Relation {
 }
 
 /**
- * Keyword
- * -------
  * Represents a keyword for identification or prioritization of an intent.
  */
 message Keyword {
@@ -105,8 +97,6 @@ message Keyword {
 }
 
 /**
- * UpdateContentRequest
- * --------------------
  * Used to add or update intents.
  */
 message UpdateContentRequest {
@@ -115,8 +105,6 @@ message UpdateContentRequest {
 }
 
 /**
- * UpdateContentResponse
- * ---------------------
  * Contains the status of the update operation.
  */
 message UpdateContentResponse {
@@ -125,8 +113,6 @@ message UpdateContentResponse {
 }
 
 /**
- * RemoveContentRequest
- * --------------------
  * Used to remove intents.
  */
 message RemoveContentRequest {
@@ -140,61 +126,56 @@ message RemoveContentRequest {
 message RemoveContentResponse {}
 
 /**
- * GetContentRequest
- * -----------------
  * Retrieves content (intents) and performs similarity searches.
  */
 message GetContentRequest {
   string prompt       = 1;
   string project_id   = 2;
   int32  num_results  = 3;
-  float  threshold    = 4;
-  repeated ContentFilter filters = 5;
-  string chat_id      = 7;
+  optional float  threshold         = 4;
+  repeated ContentFilter filters    = 5;
+  string chat_id                   = 7;
+  bool include_unpublished_intents = 8;
 }
 
 /**
- * GetContentResponse
- * ------------------
  * Response to a content query.
  */
 message GetContentResponse {
   repeated ContentResponseItem items = 1;
-  string chat_id                    = 2;
+  string chat_id                     = 2;
 }
 
 /**
- * ContentFilter
- * -------------
  * Defines filter criteria for content queries.
  */
 message ContentFilter {
-  string field    = 1;
+  string field     = 1;
   string value    = 2;
   string operator = 3;
   repeated string label = 4;
 }
 
 /**
- * ContentResponseItem
- * -------------------
  * A single search result.
  */
 message ContentResponseItem {
   // ID of the matching IntentInput element.
   string id     = 1;
   // Similarity/relevance score.
-  float  score  = 2;
+  float  score   = 2;
   // Full intent.
   Intent intent = 3;
   // A single fallback message as a string
   string fallback_message = 4;
   repeated FallbackMessage fallback_messages = 5;
+  // Number of inputs of the intent that matched the query.
+  int32 matched_inputs = 6;
+  // Might contain the keyword that resulted in the match rather than semantic similarity search.
+  Keyword matched_keyword = 7;
 }
 
 /**
- * GetIntentsRequest
- * -----------------
  * Requests all intents of a specific project.
  */
 message GetIntentsRequest {
@@ -202,22 +183,27 @@ message GetIntentsRequest {
 }
 
 /**
- * GetScoreLimitsRequest
- * ---------------------
  * Determines score limits for a project.
  */
 message GetScoreLimitsRequest {
-  string project_id                     = 1;
+  string project_id = 1;
   repeated string test_sentences_upper_limit = 2;
   repeated string test_sentences_lower_limit = 3;
 }
 
 /**
- * GetScoreLimitsResponse
- * ----------------------
  * Returns the determined score limits for a project.
  */
 message GetScoreLimitsResponse {
   float min_threshold = 1;
   float max_threshold = 2;
+}
+
+message GetKeywordsRequest {
+  string project_id = 1;
+}
+
+message GetKeywordsResponse{
+  Keyword keyword = 1;
+  string id = 2;
 }

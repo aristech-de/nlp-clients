@@ -16,145 +16,80 @@ package aristech.nlp;
  */
 service NLPServer {
   /**
-   * GetFunctions
-   * -------------
    * Returns all available processing functions (models) of the server.
    * Each function includes a unique ID, a descriptive name,
    * a description, and a list of possible arguments.
-   *
-   * Request: FunctionRequest
-   * Response: stream Function
    */
   rpc GetFunctions(FunctionRequest) returns (stream Function) {}
 
   /**
-   * RunFunctions
-   * -------------
    * Processes the provided raw text using the specified functions.
    * Multiple functions can be applied sequentially.
-   *
-   * Request: RunFunctionsRequest
-   *   - functions: List of functions to apply.
-   *   - input: The raw text to process.
-   *   - arguments: Additional parameters.
-   * Response: RunFunctionsResponse (contains the processed text result)
    */
   rpc RunFunctions(RunFunctionsRequest) returns (RunFunctionsResponse) {}
 
   /**
-   * UpdateContent
-   * --------------
    * Adds new content or updates existing content.
-   *
-   * Request: UpdateContentRequest
-   * Response: UpdateContentResponse
    */
   rpc UpdateContent(UpdateContentRequest) returns (UpdateContentResponse) {}
 
   /**
-   * RemoveContent
-   * --------------
    * Removes the specified content.
-   *
-   * Request: RemoveContentRequest
-   * Response: RemoveContentResponse
    */
   rpc RemoveContent(RemoveContentRequest) returns (RemoveContentResponse) {}
 
   /**
-   * GetContent
-   * ----------
    * Retrieves content that is available both as vectorized data and as plain text.
-   *
-   * Request: GetContentRequest
-   * Response: stream GetContentResponse
    */
   rpc GetContent(GetContentRequest) returns (stream GetContentResponse) {}
 
   /**
-   * AddProject
-   * -----------
    * Initializes a new project.
-   *
-   * Request: AddProjectRequest
-   * Response: AddProjectResponse
    */
   rpc AddProject(AddProjectRequest) returns (AddProjectResponse) {}
 
   /**
-   * RemoveProject
-   * --------------
    * Removes an existing project and all associated content.
-   *
-   * Request: RemoveProjectRequest
-   * Response: RemoveProjectResponse
    */
   rpc RemoveProject(RemoveProjectRequest) returns (RemoveProjectResponse) {}
 
   /**
-   * UpdateProject
-   * --------------
    * Updates the settings or configuration of an existing project.
-   *
-   * Request: UpdateProjectRequest
-   * Response: UpdateProjectResponse
    */
   rpc UpdateProject(UpdateProjectRequest) returns (UpdateProjectResponse) {}
 
   /**
-   * GetProjects
-   * -----------
    * Returns a list of all projects.
-   *
-   * Request: GetProjectsRequest
-   * Response: stream Project
    */
   rpc GetProjects(GetProjectsRequest) returns (stream Project) {}
 
   /**
-   * GetIntents
-   * ----------
    * Retrieves all intents of a project.
-   *
-   * Request: GetIntentsRequest
-   * Response: stream Intent
    */
   rpc GetIntents(GetIntentsRequest) returns (stream Intent) {}
 
   /**
-   * GetScoreLimits
-   * ---------------
    * Determines score limits for a project based on test inputs.
-   *
-   * Request: GetScoreLimitsRequest
-   * Response: GetScoreLimitsResponse
    */
   rpc GetScoreLimits(GetScoreLimitsRequest) returns (GetScoreLimitsResponse) {}
 
   /**
-   * GetEmbeddingModels
-   * -------------------
    * Returns a list of available embedding models for similarity searches.
-   *
-   * Request: GetEmbeddingModelsRequest
-   * Response: stream EmbeddingModel
    */
   rpc GetEmbeddingModels(GetEmbeddingModelsRequest) returns (stream EmbeddingModel) {}
 
   rpc SyncDBs(SyncDBsRequest) returns (SyncDBsResponse) {}
+
+  rpc GetKeywords(GetKeywordsRequest) returns (stream GetKeywordsResponse) {}
 }
 
 /**
- * FunctionRequest
- * ---------------
  * Request for the list of functions provided by the server.
  */
 message FunctionRequest {}
 
 
 /**
- * Function
- * --------
  * Describes a specific operation that can be applied to incoming text,
  * such as classification or recasing.
  */
@@ -171,8 +106,6 @@ message Function {
 
 
 /**
- * RunFunctionsRequest
- * -------------------
  * Request to process raw text using specified functions.
  */
 message RunFunctionsRequest {
@@ -186,8 +119,6 @@ message RunFunctionsRequest {
 
 
 /**
- * RunFunctionsResponse
- * --------------------
  * Response message containing the result of text processing.
  */
 message RunFunctionsResponse {
