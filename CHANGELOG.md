@@ -1,5 +1,24 @@
 # Changelog
 
+## Rust v3.0.0
+- 🔥 **BREAKING** If you didn't create `GetContentRequest` by spreading default (as in the content example) you must specify the new field `include_unpublished_intents` as well now.
+- 🔥 **BREAKING** The field `GetContentRequest.threshold` is explcitly marked as optional now so it has to be set to `Some(f32)` (or `None`) instead of `f32` now.
+- Added `ContentResponseItem.matched_inputs` which counts the number of inputs of the intent that matched.
+- Added `ContentResponseItem.matched_keyword` which returns the keywords that resulted in the match.
+- The content example allows to provide a different prompt as first command line argument now.
+- Bumped dependencies.
+## NodeJS v2.1.0
+- Added `GetContentRequest.include_unpublished_intents` to include unpublished intents in the response.
+- The field `GetContentRequest.threshold` is explcitly marked as optional now so if not specified, the server will default to the project's default threshold.
+- Added `ContentResponseItem.matched_inputs` which counts the number of inputs of the intent that matched.
+- Added `ContentResponseItem.matched_keyword` which returns the keywords that resulted in the match.
+- Bumped dependencies.
+## Python v2.1.0
+- Added `GetContentRequest.include_unpublished_intents` to include unpublished intents in the response.
+- The field `GetContentRequest.threshold` is explcitly marked as optional now so if not specified, the server will default to the project's default threshold.
+- Added `ContentResponseItem.matched_inputs` which counts the number of inputs of the intent that matched.
+- Added `ContentResponseItem.matched_keyword` which returns the keywords that resulted in the match.
+
 ## Node v2.0.1 - 2025-08-25
 - Bumped dependencies.
 ## Rust v2.0.1 - 2025-08-25
