@@ -13,7 +13,7 @@ pip install aristech-nlp-client
 ## Usage
 
 ```python
-from aristech_nlp_client import NlpClient
+from aristech_nlp_client import NlpClient, Function, RunFunctionsRequest
 
 client = NlpClient(host='nlp.example.com')
 response = client.run_functions(RunFunctionsRequest(
@@ -27,7 +27,7 @@ print(response.output)
 
 There are several examples in the [examples](.) directory:
 
-- [functions.py](https://github.com/aristech-de/nlp-clients/blob/main/python/examples/models.py): Demonstrates how to list the available functions.
+- [functions.py](https://github.com/aristech-de/nlp-clients/blob/main/python/examples/functions.py): Demonstrates how to list the available functions.
 - [run_functions.py](https://github.com/aristech-de/nlp-clients/blob/main/python/examples/run_functions.py): Demonstrates how to perform NLP processing on a text.
 - [projects.py](https://github.com/aristech-de/nlp-clients/blob/main/python/examples/projects.py): Demonstrates how to list the available projects.
 - [intents.py](https://github.com/aristech-de/nlp-clients/blob/main/python/examples/intents.py): Demonstrates how to list intents for a project.

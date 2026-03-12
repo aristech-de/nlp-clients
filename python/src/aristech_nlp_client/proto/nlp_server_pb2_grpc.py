@@ -3,11 +3,12 @@
 import grpc
 import warnings
 
+from . import documents_pb2 as documents__pb2
 from . import intents_pb2 as intents__pb2
 from . import nlp_server_pb2 as nlp__server__pb2
 from . import projects_pb2 as projects__pb2
 
-GRPC_GENERATED_VERSION = '1.68.0'
+GRPC_GENERATED_VERSION = '1.78.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 
@@ -20,7 +21,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in nlp_server_pb2_grpc.py depends on'
+        + ' but the generated code in nlp_server_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -109,6 +110,36 @@ class NLPServerStub(object):
                 '/aristech.nlp.NLPServer/GetKeywords',
                 request_serializer=intents__pb2.GetKeywordsRequest.SerializeToString,
                 response_deserializer=intents__pb2.GetKeywordsResponse.FromString,
+                _registered_method=True)
+        self.AddDocuments = channel.unary_unary(
+                '/aristech.nlp.NLPServer/AddDocuments',
+                request_serializer=documents__pb2.AddDocumentsRequest.SerializeToString,
+                response_deserializer=documents__pb2.AddDocumentsResponse.FromString,
+                _registered_method=True)
+        self.GetDocuments = channel.unary_unary(
+                '/aristech.nlp.NLPServer/GetDocuments',
+                request_serializer=documents__pb2.GetDocumentsRequest.SerializeToString,
+                response_deserializer=documents__pb2.GetDocumentsResponse.FromString,
+                _registered_method=True)
+        self.ProcessDocuments = channel.unary_unary(
+                '/aristech.nlp.NLPServer/ProcessDocuments',
+                request_serializer=documents__pb2.ProcessDocumentsRequest.SerializeToString,
+                response_deserializer=documents__pb2.ProcessDocumentsResponse.FromString,
+                _registered_method=True)
+        self.UpdateDocuments = channel.unary_unary(
+                '/aristech.nlp.NLPServer/UpdateDocuments',
+                request_serializer=documents__pb2.UpdateDocumentsRequest.SerializeToString,
+                response_deserializer=documents__pb2.UpdateDocumentsResponse.FromString,
+                _registered_method=True)
+        self.RemoveDocuments = channel.unary_unary(
+                '/aristech.nlp.NLPServer/RemoveDocuments',
+                request_serializer=documents__pb2.RemoveDocumentsRequest.SerializeToString,
+                response_deserializer=documents__pb2.RemoveDocumentsResponse.FromString,
+                _registered_method=True)
+        self.GetDocumentStatus = channel.unary_unary(
+                '/aristech.nlp.NLPServer/GetDocumentStatus',
+                request_serializer=documents__pb2.GetDocumentStatusRequest.SerializeToString,
+                response_deserializer=documents__pb2.GetDocumentStatusResponse.FromString,
                 _registered_method=True)
 
 
@@ -230,6 +261,42 @@ class NLPServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def AddDocuments(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetDocuments(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ProcessDocuments(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def UpdateDocuments(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def RemoveDocuments(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetDocumentStatus(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_NLPServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -302,6 +369,36 @@ def add_NLPServerServicer_to_server(servicer, server):
                     servicer.GetKeywords,
                     request_deserializer=intents__pb2.GetKeywordsRequest.FromString,
                     response_serializer=intents__pb2.GetKeywordsResponse.SerializeToString,
+            ),
+            'AddDocuments': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddDocuments,
+                    request_deserializer=documents__pb2.AddDocumentsRequest.FromString,
+                    response_serializer=documents__pb2.AddDocumentsResponse.SerializeToString,
+            ),
+            'GetDocuments': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetDocuments,
+                    request_deserializer=documents__pb2.GetDocumentsRequest.FromString,
+                    response_serializer=documents__pb2.GetDocumentsResponse.SerializeToString,
+            ),
+            'ProcessDocuments': grpc.unary_unary_rpc_method_handler(
+                    servicer.ProcessDocuments,
+                    request_deserializer=documents__pb2.ProcessDocumentsRequest.FromString,
+                    response_serializer=documents__pb2.ProcessDocumentsResponse.SerializeToString,
+            ),
+            'UpdateDocuments': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateDocuments,
+                    request_deserializer=documents__pb2.UpdateDocumentsRequest.FromString,
+                    response_serializer=documents__pb2.UpdateDocumentsResponse.SerializeToString,
+            ),
+            'RemoveDocuments': grpc.unary_unary_rpc_method_handler(
+                    servicer.RemoveDocuments,
+                    request_deserializer=documents__pb2.RemoveDocumentsRequest.FromString,
+                    response_serializer=documents__pb2.RemoveDocumentsResponse.SerializeToString,
+            ),
+            'GetDocumentStatus': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetDocumentStatus,
+                    request_deserializer=documents__pb2.GetDocumentStatusRequest.FromString,
+                    response_serializer=documents__pb2.GetDocumentStatusResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -686,6 +783,168 @@ class NLPServer(object):
             '/aristech.nlp.NLPServer/GetKeywords',
             intents__pb2.GetKeywordsRequest.SerializeToString,
             intents__pb2.GetKeywordsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def AddDocuments(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/aristech.nlp.NLPServer/AddDocuments',
+            documents__pb2.AddDocumentsRequest.SerializeToString,
+            documents__pb2.AddDocumentsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetDocuments(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/aristech.nlp.NLPServer/GetDocuments',
+            documents__pb2.GetDocumentsRequest.SerializeToString,
+            documents__pb2.GetDocumentsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ProcessDocuments(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/aristech.nlp.NLPServer/ProcessDocuments',
+            documents__pb2.ProcessDocumentsRequest.SerializeToString,
+            documents__pb2.ProcessDocumentsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def UpdateDocuments(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/aristech.nlp.NLPServer/UpdateDocuments',
+            documents__pb2.UpdateDocumentsRequest.SerializeToString,
+            documents__pb2.UpdateDocumentsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def RemoveDocuments(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/aristech.nlp.NLPServer/RemoveDocuments',
+            documents__pb2.RemoveDocumentsRequest.SerializeToString,
+            documents__pb2.RemoveDocumentsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetDocumentStatus(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/aristech.nlp.NLPServer/GetDocumentStatus',
+            documents__pb2.GetDocumentStatusRequest.SerializeToString,
+            documents__pb2.GetDocumentStatusResponse.FromString,
             options,
             channel_credentials,
             insecure,

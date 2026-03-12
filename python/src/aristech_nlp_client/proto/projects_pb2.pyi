@@ -35,7 +35,7 @@ class GetProjectsRequest(google.protobuf.message.Message):
         self,
     ) -> None: ...
 
-global___GetProjectsRequest = GetProjectsRequest
+Global___GetProjectsRequest: typing_extensions.TypeAlias = GetProjectsRequest
 
 @typing.final
 class Project(google.protobuf.message.Message):
@@ -59,7 +59,7 @@ class Project(google.protobuf.message.Message):
     ) -> None: ...
     def ClearField(self, field_name: typing.Literal["id", b"id", "name", b"name"]) -> None: ...
 
-global___Project = Project
+Global___Project: typing_extensions.TypeAlias = Project
 
 @typing.final
 class AddProjectRequest(google.protobuf.message.Message):
@@ -97,15 +97,15 @@ class AddProjectRequest(google.protobuf.message.Message):
     slug: builtins.str
     """URL-friendly identifier of the project."""
     @property
-    def embedding_model(self) -> global___EmbeddingModel:
+    def embedding_model(self) -> Global___EmbeddingModel:
         """Model used for vectorization."""
 
     @property
-    def fallback_messages(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___FallbackMessage]:
+    def fallback_messages(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[Global___FallbackMessage]:
         """Predefined fallback messages for different channels."""
 
     @property
-    def history(self) -> global___History:
+    def history(self) -> Global___History:
         """Metadata about creation and changes."""
 
     def __init__(
@@ -113,20 +113,20 @@ class AddProjectRequest(google.protobuf.message.Message):
         *,
         name: builtins.str = ...,
         description: builtins.str = ...,
-        embedding_model: global___EmbeddingModel | None = ...,
-        fallback_messages: collections.abc.Iterable[global___FallbackMessage] | None = ...,
+        embedding_model: Global___EmbeddingModel | None = ...,
+        fallback_messages: collections.abc.Iterable[Global___FallbackMessage] | None = ...,
         default_threshold: builtins.float = ...,
         team_id: builtins.str = ...,
         debug_mode: builtins.bool = ...,
         exclude_output_from_search: builtins.bool = ...,
-        history: global___History | None = ...,
+        history: Global___History | None = ...,
         config_slug: builtins.str = ...,
         slug: builtins.str = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["embedding_model", b"embedding_model", "history", b"history"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["config_slug", b"config_slug", "debug_mode", b"debug_mode", "default_threshold", b"default_threshold", "description", b"description", "embedding_model", b"embedding_model", "exclude_output_from_search", b"exclude_output_from_search", "fallback_messages", b"fallback_messages", "history", b"history", "name", b"name", "slug", b"slug", "team_id", b"team_id"]) -> None: ...
 
-global___AddProjectRequest = AddProjectRequest
+Global___AddProjectRequest: typing_extensions.TypeAlias = AddProjectRequest
 
 @typing.final
 class FallbackMessage(google.protobuf.message.Message):
@@ -172,7 +172,7 @@ class FallbackMessage(google.protobuf.message.Message):
     MESSAGE_MAP_FIELD_NUMBER: builtins.int
     message: builtins.str
     """The fallback message text."""
-    channel: global___FallbackMessage.Channel.ValueType
+    channel: Global___FallbackMessage.Channel.ValueType
     """The channel for which this message is intended (e.g., CHAT, EMAIL, VOICE)."""
     @property
     def message_map(self) -> google.protobuf.internal.containers.ScalarMap[builtins.str, builtins.str]:
@@ -182,12 +182,12 @@ class FallbackMessage(google.protobuf.message.Message):
         self,
         *,
         message: builtins.str = ...,
-        channel: global___FallbackMessage.Channel.ValueType = ...,
+        channel: Global___FallbackMessage.Channel.ValueType = ...,
         message_map: collections.abc.Mapping[builtins.str, builtins.str] | None = ...,
     ) -> None: ...
     def ClearField(self, field_name: typing.Literal["channel", b"channel", "message", b"message", "message_map", b"message_map"]) -> None: ...
 
-global___FallbackMessage = FallbackMessage
+Global___FallbackMessage: typing_extensions.TypeAlias = FallbackMessage
 
 @typing.final
 class History(google.protobuf.message.Message):
@@ -219,7 +219,7 @@ class History(google.protobuf.message.Message):
     ) -> None: ...
     def ClearField(self, field_name: typing.Literal["changed_by", b"changed_by", "creation_date", b"creation_date", "creator_id", b"creator_id", "last_edit_date", b"last_edit_date"]) -> None: ...
 
-global___History = History
+Global___History: typing_extensions.TypeAlias = History
 
 @typing.final
 class AddProjectResponse(google.protobuf.message.Message):
@@ -239,7 +239,7 @@ class AddProjectResponse(google.protobuf.message.Message):
     ) -> None: ...
     def ClearField(self, field_name: typing.Literal["project_id", b"project_id"]) -> None: ...
 
-global___AddProjectResponse = AddProjectResponse
+Global___AddProjectResponse: typing_extensions.TypeAlias = AddProjectResponse
 
 @typing.final
 class RemoveProjectRequest(google.protobuf.message.Message):
@@ -259,7 +259,7 @@ class RemoveProjectRequest(google.protobuf.message.Message):
     ) -> None: ...
     def ClearField(self, field_name: typing.Literal["project_id", b"project_id"]) -> None: ...
 
-global___RemoveProjectRequest = RemoveProjectRequest
+Global___RemoveProjectRequest: typing_extensions.TypeAlias = RemoveProjectRequest
 
 @typing.final
 class RemoveProjectResponse(google.protobuf.message.Message):
@@ -273,7 +273,7 @@ class RemoveProjectResponse(google.protobuf.message.Message):
         self,
     ) -> None: ...
 
-global___RemoveProjectResponse = RemoveProjectResponse
+Global___RemoveProjectResponse: typing_extensions.TypeAlias = RemoveProjectResponse
 
 @typing.final
 class GetEmbeddingModelsRequest(google.protobuf.message.Message):
@@ -287,7 +287,7 @@ class GetEmbeddingModelsRequest(google.protobuf.message.Message):
         self,
     ) -> None: ...
 
-global___GetEmbeddingModelsRequest = GetEmbeddingModelsRequest
+Global___GetEmbeddingModelsRequest: typing_extensions.TypeAlias = GetEmbeddingModelsRequest
 
 @typing.final
 class EmbeddingModel(google.protobuf.message.Message):
@@ -321,7 +321,7 @@ class EmbeddingModel(google.protobuf.message.Message):
     ) -> None: ...
     def ClearField(self, field_name: typing.Literal["base_library", b"base_library", "dimensions", b"dimensions", "locale", b"locale", "name", b"name"]) -> None: ...
 
-global___EmbeddingModel = EmbeddingModel
+Global___EmbeddingModel: typing_extensions.TypeAlias = EmbeddingModel
 
 @typing.final
 class UpdateProjectRequest(google.protobuf.message.Message):
@@ -359,15 +359,15 @@ class UpdateProjectRequest(google.protobuf.message.Message):
     slug: builtins.str
     """URL-friendly identifier of the project."""
     @property
-    def embedding_model(self) -> global___EmbeddingModel:
+    def embedding_model(self) -> Global___EmbeddingModel:
         """Model used for vectorization."""
 
     @property
-    def fallback_messages(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___FallbackMessage]:
+    def fallback_messages(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[Global___FallbackMessage]:
         """Predefined fallback messages for different channels."""
 
     @property
-    def history(self) -> global___History:
+    def history(self) -> Global___History:
         """Metadata about creation and changes."""
 
     def __init__(
@@ -376,19 +376,19 @@ class UpdateProjectRequest(google.protobuf.message.Message):
         project_id: builtins.str = ...,
         name: builtins.str = ...,
         description: builtins.str = ...,
-        embedding_model: global___EmbeddingModel | None = ...,
-        fallback_messages: collections.abc.Iterable[global___FallbackMessage] | None = ...,
+        embedding_model: Global___EmbeddingModel | None = ...,
+        fallback_messages: collections.abc.Iterable[Global___FallbackMessage] | None = ...,
         default_threshold: builtins.float = ...,
         debug_mode: builtins.bool = ...,
         exclude_output_from_search: builtins.bool = ...,
-        history: global___History | None = ...,
+        history: Global___History | None = ...,
         config_slug: builtins.str = ...,
         slug: builtins.str = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["embedding_model", b"embedding_model", "history", b"history"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["config_slug", b"config_slug", "debug_mode", b"debug_mode", "default_threshold", b"default_threshold", "description", b"description", "embedding_model", b"embedding_model", "exclude_output_from_search", b"exclude_output_from_search", "fallback_messages", b"fallback_messages", "history", b"history", "name", b"name", "project_id", b"project_id", "slug", b"slug"]) -> None: ...
 
-global___UpdateProjectRequest = UpdateProjectRequest
+Global___UpdateProjectRequest: typing_extensions.TypeAlias = UpdateProjectRequest
 
 @typing.final
 class UpdateProjectResponse(google.protobuf.message.Message):
@@ -402,4 +402,4 @@ class UpdateProjectResponse(google.protobuf.message.Message):
         self,
     ) -> None: ...
 
-global___UpdateProjectResponse = UpdateProjectResponse
+Global___UpdateProjectResponse: typing_extensions.TypeAlias = UpdateProjectResponse

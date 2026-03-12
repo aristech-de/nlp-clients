@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+
 # Get the directory of the script
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 echo "Compiling .proto files to Python in directory: $SCRIPT_DIR"
@@ -26,20 +28,27 @@ python -m grpc_tools.protoc \
 # import nlp_server_pb2 as nlp__server__pb2
 # import projects_pb2 as projects__pb2
 # import intents_pb2 as intents__pb2
+# import documents_pb2 as documents__pb2
 # with
 # from . import nlp_server_pb2 as nlp__server__pb2
 # from . import projects_pb2 as projects__pb2
 # from . import intents_pb2 as intents__pb2
+# from . import documents_pb2 as documents__pb2
 sed -i '' 's/import nlp_server_pb2 as nlp__server__pb2/from . import nlp_server_pb2 as nlp__server__pb2/g' ${OUT_DIR}/nlp_server_pb2_grpc.py
 sed -i '' 's/import intents_pb2 as intents__pb2/from . import intents_pb2 as intents__pb2/g' ${OUT_DIR}/nlp_server_pb2_grpc.py
 sed -i '' 's/import projects_pb2 as projects__pb2/from . import projects_pb2 as projects__pb2/g' ${OUT_DIR}/nlp_server_pb2_grpc.py
+sed -i '' 's/import documents_pb2 as documents__pb2/from . import documents_pb2 as documents__pb2/g' ${OUT_DIR}/nlp_server_pb2_grpc.py
 
 sed -i '' 's/import projects_pb2 as projects__pb2/from . import projects_pb2 as projects__pb2/g' ${OUT_DIR}/nlp_server_pb2.py
 sed -i '' 's/import intents_pb2 as intents__pb2/from . import intents_pb2 as intents__pb2/g' ${OUT_DIR}/nlp_server_pb2.py
+sed -i '' 's/import documents_pb2 as documents__pb2/from . import documents_pb2 as documents__pb2/g' ${OUT_DIR}/nlp_server_pb2.py
 
 sed -i '' 's/import projects_pb2 as projects__pb2/from . import projects_pb2 as projects__pb2/g' ${OUT_DIR}/projects_pb2_grpc.py
 sed -i '' 's/import intents_pb2 as intents__pb2/from . import intents_pb2 as intents__pb2/g' ${OUT_DIR}/intents_pb2_grpc.py
 sed -i '' 's/import projects_pb2 as projects__pb2/from . import projects_pb2 as projects__pb2/g' ${OUT_DIR}/intents_pb2.py
+sed -i '' 's/projects_pb2 as projects__pb2/from . import projects_pb2 as projects__pb2/g' ${OUT_DIR}/documents_pb2_grpc.py
+sed -i '' 's/import documents_pb2 as documents__pb2/from . import documents_pb2 as documents__pb2/g' ${OUT_DIR}/documents_pb2_grpc.py
+sed -i '' 's/import projects_pb2 as projects__pb2/from . import projects_pb2 as projects__pb2/g' ${OUT_DIR}/documents_pb2.py
 
 # Copy the __init__.py file to the generated directory
 touch ${OUT_DIR}/__init__.py

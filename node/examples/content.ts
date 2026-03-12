@@ -20,12 +20,14 @@ const response = await client.getContent({
   numResults: 3,
   projectId: process.env.PROJECT_ID,
 })
-console.log(util.inspect(response, { depth: null, colors: true }))
+for (const item of response) {
+  console.log(util.inspect(item, { depth: null, colors: true }))
+}
 
 // Update content inside the vector database
 /*
 const updateResponse = await client.updateContent({
-  intent: [{
+  intents: [{
     id: '123',
     topic: 'lottery-numbers',
     projectId: process.env.PROJECT_ID,

@@ -61,6 +61,8 @@ message Intent {
   repeated Keyword keywords = 13;
   // ID of the creator of this intent.
   string creator_id = 14;
+  // Optional: ID of the document this intent was generated from.
+  string document_id = 16;
 }
 
 /**

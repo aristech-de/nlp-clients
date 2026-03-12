@@ -24,9 +24,9 @@ except StopIteration:
 """
 from aristech_nlp_client import UpdateContentRequest, Intent, IntentInput
 updateResponse = client.update_content(UpdateContentRequest(
-    intent=[Intent(
+    intents=[Intent(
         id="123",
-        projectId=project_id,
+        project_id=project_id,
         topic="lottery-numbers",
         inputs=[
             IntentInput(uuid="82a2133e-038e-4c83-aa26-de47ed386c55", input="What are the lottery numbers?"),
@@ -44,7 +44,7 @@ updateResponse = client.update_content(UpdateContentRequest(
 from aristech_nlp_client import RemoveContentRequest
 removeResponse = client.remove_content(RemoveContentRequest(
     id=["82a2133e-038e-4c83-aa26-de47ed386c55"],
-    projectId=project_id,
+    project_id=project_id,
 ))
 """
 

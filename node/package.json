@@ -53,6 +53,7 @@
     ".": "./dist/index.js",
     "./dist/generated/intents": "./dist/generated/intents.js",
     "./dist/generated/nlp_server": "./dist/generated/nlp_server.js",
-    "./dist/generated/project": "./dist/generated/project.js"
+    "./dist/generated/projects": "./dist/generated/projects.js",
+    "./dist/generated/documents": "./dist/generated/documents.js"
   }
 }

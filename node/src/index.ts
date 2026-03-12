@@ -7,13 +7,17 @@ import {
   NLPServerClient,
   RunFunctionsRequest,
   type RunFunctionsResponse,
+  SyncDBsRequest,
+  type SyncDBsResponse,
 } from './generated/nlp_server.js'
 import {
   GetContentRequest,
   type GetContentResponse,
   GetIntentsRequest,
+  GetKeywordsRequest,
+  type GetKeywordsResponse,
   GetScoreLimitsRequest,
-  GetScoreLimitsResponse,
+  type GetScoreLimitsResponse,
   Intent,
   RemoveContentRequest,
   type RemoveContentResponse,
@@ -23,20 +27,37 @@ import {
 import {
   AddProjectRequest,
   type AddProjectResponse,
+  EmbeddingModel,
+  GetEmbeddingModelsRequest,
   GetProjectsRequest,
   type Project,
   RemoveProjectRequest,
-  RemoveProjectResponse,
+  type RemoveProjectResponse,
   UpdateProjectRequest,
-  UpdateProjectResponse,
+  type UpdateProjectResponse,
 } from './generated/projects.js'
 
 import fs from 'fs'
+import {
+  AddDocumentsRequest,
+  type AddDocumentsResponse,
+  GetDocumentsRequest,
+  type GetDocumentsResponse,
+  GetDocumentStatusRequest,
+  type GetDocumentStatusResponse,
+  ProcessDocumentsRequest,
+  type ProcessDocumentsResponse,
+  RemoveDocumentsRequest,
+  type RemoveDocumentsResponse,
+  UpdateDocumentsRequest,
+  type UpdateDocumentsResponse
+} from './generated/documents.js'
 
 // Re-export generated types
 export * as NlpServer from './generated/nlp_server.js'
 export * as Projects from './generated/projects.js'
 export * as Intents from './generated/intents.js'
+export * as Documents from './generated/documents.js'
 
 export interface ConnectionOptions {
   /**
@@ -122,7 +143,7 @@ export class NlpClient {
       })
     })
   }
-  
+
   /**
    * Performs a processing request with the given request
    * @deprecated Use `runFunctions` instead
@@ -276,21 +297,88 @@ export class NlpClient {
    */
   async getContent(
     request: DeepPartial<GetContentRequest>,
-  ): Promise<GetContentResponse> {
+  ): Promise<Array<GetContentResponse>> {
     return new Promise((res, rej) => {
       const client = this.getClient()
       const req = GetContentRequest.create(request)
       const stream = client.getContent(req)
-      let response: GetContentResponse | null = null
+      const responses: Array<GetContentResponse> = []
       stream.on('data', (data: GetContentResponse) => {
-        response = data
+        responses.push(data)
       })
       stream.on('end', () => {
-        if (response !== null) {
-          res(response)
-        } else {
-          rej(new Error('No response received'))
+        res(responses)
+      })
+      stream.on('error', (err) => {
+        rej(err)
+      })
+    })
+  }
+
+  /**
+   * List all available embedding models on the server
+   * @param request An optional request object
+   * @returns A promise that resolves with an array of embedding models
+   */
+  async listEmbeddingModels(
+    request?: DeepPartial<GetEmbeddingModelsRequest>,
+  ): Promise<Array<EmbeddingModel>> {
+    return new Promise((res, rej) => {
+      const client = this.getClient()
+      const req = GetEmbeddingModelsRequest.create(request)
+      const stream = client.getEmbeddingModels(req)
+      const models: Array<EmbeddingModel> = []
+      stream.on('data', (data: EmbeddingModel) => {
+        models.push(data)
+      })
+      stream.on('end', () => {
+        res(models)
+      })
+      stream.on('error', (err) => {
+        rej(err)
+      })
+    })
+  }
+
+  /**
+   * Triggers a database synchronization on the server.
+   * @param request An optional request object
+   * @returns A promise that resolves with the synchronization response
+   */
+  async syncDbs(
+    request?: DeepPartial<SyncDBsRequest>,
+  ): Promise<SyncDBsResponse> {
+    return new Promise((res, rej) => {
+      const client = this.getClient()
+      const req = SyncDBsRequest.create(request)
+      client.syncDBs(req, (err, response) => {
+        if (err) {
+          rej(err)
+          return
         }
+        res(response)
+      })
+    })
+  }
+
+  /**
+   * Get all keywords for a given project
+   * @param request The request object
+   * @returns A promise that resolves with the response objects
+   */
+  async getKeywords(
+    request: DeepPartial<GetKeywordsRequest>,
+  ): Promise<Array<GetKeywordsResponse>> {
+    return new Promise((res, rej) => {
+      const client = this.getClient()
+      const req = GetKeywordsRequest.create(request)
+      const stream = client.getKeywords(req)
+      const keywords: Array<GetKeywordsResponse> = []
+      stream.on('data', (data: GetKeywordsResponse) => {
+        keywords.push(data)
+      })
+      stream.on('end', () => {
+        res(keywords)
       })
       stream.on('error', (err) => {
         rej(err)
@@ -331,6 +419,132 @@ export class NlpClient {
       const client = this.getClient()
       const req = RemoveContentRequest.create(request)
       client.removeContent(req, (err, response) => {
+        if (err) {
+          rej(err)
+          return
+        }
+        res(response)
+      })
+    })
+  }
+
+  /**
+  * Adds documents to a given project.
+  * @param request The request object
+  * @return A promise that resolves with the response object
+  */
+  async addDocuments(
+    request: DeepPartial<AddDocumentsRequest>,
+  ): Promise<AddDocumentsResponse> {
+    return new Promise((res, rej) => {
+      const client = this.getClient()
+      const req = AddDocumentsRequest.create(request)
+      client.addDocuments(req, (err, response) => {
+        if (err) {
+          rej(err)
+          return
+        }
+        res(response)
+      })
+    })
+  }
+
+  /**
+  * Gets all documents for a given project.
+  * @param request The request object
+  * @return A promise that resolves with the response object
+  */
+  async getDocuments(
+    request: DeepPartial<GetDocumentsRequest>,
+  ): Promise<GetDocumentsResponse> {
+    return new Promise((res, rej) => {
+      const client = this.getClient()
+      const req = GetDocumentsRequest.create(request)
+      client.getDocuments(req, (err, response) => {
+        if (err) {
+          rej(err)
+          return
+        }
+        res(response)
+      })
+    })
+  }
+
+  /**
+  * Processes spefified documents in a project. 
+  * @param request The request object
+  * @return A promise that resolves with the response object
+  */
+  async processDocuments(
+    request: DeepPartial<ProcessDocumentsRequest>,
+  ): Promise<ProcessDocumentsResponse> {
+    return new Promise((res, rej) => {
+      const client = this.getClient()
+      const req = ProcessDocumentsRequest.create(request)
+      client.processDocuments(req, (err, response) => {
+        if (err) {
+          rej(err)
+          return
+        }
+        res(response)
+      })
+    })
+  }
+
+  /**
+  * Updates documents in a project.
+  * @param request The request object
+  * @return A promise that resolves with the response object
+  */
+  async updateDocuments(
+    request: DeepPartial<UpdateDocumentsRequest>,
+  ): Promise<UpdateDocumentsResponse> {
+    return new Promise((res, rej) => {
+      const client = this.getClient()
+      const req = UpdateDocumentsRequest.create(request)
+      client.updateDocuments(req, (err, response) => {
+        if (err) {
+          rej(err)
+          return
+        }
+        res(response)
+      })
+    })
+  }
+
+  /**
+  * Removes documents from a project.
+  * @param request The request object
+  * @return A promise that resolves with the response object
+  */
+  async removeDocuments(
+    request: DeepPartial<RemoveDocumentsRequest>,
+  ): Promise<RemoveDocumentsResponse> {
+    return new Promise((res, rej) => {
+      const client = this.getClient()
+      const req = RemoveDocumentsRequest.create(request)
+      client.removeDocuments(req, (err, response) => {
+        if (err) {
+          rej(err)
+          return
+        }
+        res(response)
+      })
+    })
+  }
+
+  /**
+  * Gets the processing status of a document in a project. 
+  * @param request The request object
+  * @return A promise that resolves with the response object
+  */
+  async getDocumentStatus(
+    request: DeepPartial<GetDocumentStatusRequest>,
+  ): Promise<GetDocumentStatusResponse> {
+    return new Promise((res, rej) => {
+      const client = this.getClient()
+      const req = GetDocumentStatusRequest.create(request)
+      client.getDocumentStatus(req, (err, response) => {
         if (err) {
           rej(err)
           return

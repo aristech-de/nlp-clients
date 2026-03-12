@@ -14,8 +14,8 @@ cargo add aristech-nlp-client
 
 ```rust
 use aristech_nlp_client::{
-  get_client, process, TlsOptions, Auth,
-  nlp_service::{Function, ProcessRawRequest},
+  get_client, run_functions, TlsOptions, Auth,
+  nlp_service::{Function, RunFunctionsRequest},
 };
 use std::error::Error;
 
@@ -29,12 +29,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
     }),
     ).await?;
 
-    let response = process(&mut client, ProcessRawRequest {
+    let response = run_functions(&mut client, RunFunctionsRequest {
       input: "hello world".to_string(),
       functions: vec![
         Function { id: "spellcheck".to_string(), ..Function::default() },
       ],
-      ..ProcessRawRequest::default()
+      ..RunFunctionsRequest::default()
     }).await?;
     println!("{}", response.output);
     Ok(())
@@ -43,8 +43,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
 There are several examples in the [examples](.) directory:
 
-- [functions.rs](examples/models.rs): Demonstrates how to list the available functions.
-- [process.rs](examples/process.rs): Demonstrates how to perform NLP processing on a text.
+- [functions.rs](examples/functions.rs): Demonstrates how to list the available functions.
+- [runFunctions.rs](examples/runFunctions.rs): Demonstrates how to perform NLP processing on a text.
 - [projects.rs](examples/projects.rs): Demonstrates how to list the available projects.
 - [intents.rs](examples/intents.rs): Demonstrates how to list intents for a project.
 - [scoreLimits.rs](examples/scoreLimits.rs): Demonstrates how to use score limits to figure out good thresholds for intents.

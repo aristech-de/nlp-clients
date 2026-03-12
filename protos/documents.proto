@@ -1,0 +1,228 @@
+// Copyright Aristech GmbH
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option objc_class_prefix = "ATS";
+
+package aristech.nlp;
+
+
+import "projects.proto";
+
+/**
+ * Document with metadata and content
+ */
+message Document {
+  // Document ID (only for Get/Update/Delete).
+  string id = 1;
+  // Project this document belongs to.
+  string project_id = 2;
+  // Document name/title.
+  string name = 3;
+  // Content type.
+  ContentType content_type = 4;
+  // Original filename.
+  string filename = 5;
+  // Optional description.
+  string description = 6;
+  // Raw document content (bytes)
+  bytes data = 7;
+  
+  // Read-only fields (returned by server, ignored on Add/Update):
+  History history = 8;
+  repeated string intent_ids = 9;
+  ProcessingStatus processing_status = 10;
+  int32 chunk_count = 11;
+  int64 file_size = 12;
+  string content_hash = 13;
+  string content_preview = 14;
+}
+
+/**
+ * Processing status.
+ */
+message ProcessingStatus {
+  enum Status {
+    PENDING = 0;
+    PROCESSING = 1;
+    COMPLETED = 2;
+    FAILED = 3;
+  }
+  Status status = 1;
+  int32 progress = 2;
+  string error_message = 3;
+  string last_updated = 4;
+}
+
+/**
+ * Request to add documents.
+ */
+message AddDocumentsRequest {
+  string project_id = 1;
+  string creator_id = 2;
+  // Documents to add (with data field filled).
+  repeated Document documents = 3;
+  bool auto_process = 4;
+  string chunking_strategy = 5;
+  // If true, exclude output messages from vector search (only inputs will be vectorized).
+  bool exclude_outputs_from_search = 6;
+}
+
+/**
+ * Response from adding documents.
+ */
+message AddDocumentsResponse {
+  message Result {
+    string document_id = 1;
+    string content_hash = 2;
+    ProcessingStatus processing_status = 3;
+    string error = 4;
+  }
+  repeated Result results = 1;
+  int32 succeeded = 2;
+  int32 failed = 3;
+}
+
+/**
+ * Request to get documents.
+ */
+message GetDocumentsRequest {
+  string project_id = 1;
+  // Filters
+  ContentType content_type_filter = 2;
+  ProcessingStatus.Status status_filter = 3;
+  repeated string document_ids = 4;
+  // Pagination
+  int32 limit = 5;
+  int32 offset = 6;
+  // Include data field in response.
+  bool include_data = 7;
+  // Set to true when content_type_filter is explicitly set (needed because enum default 0 = IMAGE_PNG).
+  bool has_content_type_filter = 8;
+  // Set to true when status_filter is explicitly set (needed because enum default 0 = PENDING).
+  bool has_status_filter = 9;
+}
+
+/**
+ * Response with documents.
+ */
+message GetDocumentsResponse {
+  repeated Document documents = 1;
+  int32 total_count = 2;
+}
+
+/**
+ * Request to process documents into intents.
+ */
+message ProcessDocumentsRequest {
+  string project_id = 1;
+  repeated string document_ids = 2;
+  string chunking_strategy = 3;
+  int32 batch_size = 4;
+  bool force_reprocess = 5;
+  // If true, exclude output messages from vector search (only inputs will be vectorized).
+  bool exclude_outputs_from_search = 6;
+}
+
+/**
+ * Response from processing.
+ */
+message ProcessDocumentsResponse {
+  message Result {
+    string document_id = 1;
+    int32 intents_created = 2;
+    repeated string intent_ids = 3;
+    ProcessingStatus processing_status = 4;
+    string error = 5;
+  }
+  repeated Result results = 1;
+  int32 succeeded = 2;
+  int32 failed = 3;
+}
+
+/**
+ * Request to update documents.
+ * Fill data field only if content should be updated.
+ */
+message UpdateDocumentsRequest {
+  string project_id = 1;
+  // Documents to update (id required, fill other fields to update them).
+  repeated Document documents = 2;
+  bool auto_reprocess = 3;
+  bool delete_old_intents = 4;
+  // If true, exclude output messages from vector search (only inputs will be vectorized).
+  bool exclude_outputs_from_search = 5;
+}
+
+/**
+ * Response from update.
+ */
+message UpdateDocumentsResponse {
+  message Result {
+    string document_id = 1;
+    string content_hash = 2;
+    ProcessingStatus processing_status = 3;
+    int32 deleted_intents_count = 4;
+    string error = 5;
+    int32 intents_created = 6;  // Number of new intents created (if auto_reprocess)
+    repeated string intent_ids = 7;  // IDs of new intents created (if auto_reprocess)
+  }
+  repeated Result results = 1;
+  int32 succeeded = 2;
+  int32 failed = 3;
+}
+
+/**
+ * Request to remove documents.
+ */
+message RemoveDocumentsRequest {
+  string project_id = 1;
+  repeated string document_ids = 2;
+  bool cascade_delete = 3;
+}
+
+/**
+ * Response from removal.
+ */
+message RemoveDocumentsResponse {
+  message Result {
+    string document_id = 1;
+    int32 intents_deleted = 2;
+    string error = 3;
+  }
+  repeated Result results = 1;
+  int32 succeeded = 2;
+  int32 failed = 3;
+}
+
+/**
+ * Request to get document status.
+ */
+message GetDocumentStatusRequest {
+  string project_id = 1;
+  repeated string document_ids = 2;
+}
+
+/**
+ * Response with status.
+ */
+message GetDocumentStatusResponse {
+  message Status {
+    string document_id = 1;
+    ProcessingStatus processing_status = 2;
+    int32 intents_created = 3;
+    repeated string intent_ids = 4;
+  }
+  repeated Status statuses = 1;
+}
+
+enum ContentType{
+  IMAGE_PNG = 0;
+  APPLICATION_MD = 1;
+  APPLICATION_TXT = 2;
+  APPLICATION_PDF = 3;
+  IMAGE_JPEG = 4;
+  IMAGE_WEBP = 5;
+  APPLICATION_XLSX = 6;
+}
