@@ -7,7 +7,7 @@ use aristech_nlp_client::{get_client, get_score_limits, nlp_service::GetScoreLim
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     // Load environment variables from .env file
-    dotenv::dotenv().ok();
+    dotenvy::dotenv().ok();
 
     let host = std::env::var("HOST")?;
     let tls_options = get_tls_options()?;

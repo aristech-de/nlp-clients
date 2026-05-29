@@ -7,7 +7,7 @@ use aristech_nlp_client::{get_client, get_content, nlp_service::GetContentReques
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     // Load environment variables from .env file
-    dotenv::dotenv().ok();
+    dotenvy::dotenv().ok();
 
     // Use the first argument or a default prompt
     let prompt = std::env::args()

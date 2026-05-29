@@ -1,5 +1,15 @@
 # Changelog
 
+## Rust v3.1.0 - 2026-05-29
+- Updated dependencies.
+- `get_client` now walks through potential errors to provide more helpful error messages when the client cannot be created.
+- Switched from dotenv to dotenvy because the former seems to be unmaintained.
+
+# NodeJS v3.0.0 - 2026-05-29
+- Updated dependencies.
+- Added support for documents and several other new functions from the protobuf API.
+- 🔥 **BREAKING** `getContent` returns a list of responses now and not only the first one as before.
+
 ## Rust v3.0.1
 - Added `--experimental_allow_proto3_optional` to the protobuf compiler arguments to fix issues with optional fields.
 
