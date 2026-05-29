@@ -13,7 +13,7 @@ from .proto.intents_pb2 import *
 class NlpClient:
     host: str
     ssl: bool
-    rootCert: bytes
+    root_cert: bytes
     auth_token: str
     auth_secret: str
     channel: grpc.Channel
@@ -29,16 +29,16 @@ class NlpClient:
         auth_token (str): The auth token to use for authentication.
         auth_secret (str): The auth secret to use for authentication.
       """
-      # When ssl or rootCert are not explicitly set, we check if the host includes the port 9424 or 9423.
+      # When ssl or root_cert are not explicitly set, we check if the host includes the port 9424 or 9423.
       # If host does not include the port, we assume ssl is True and the port is 9424 therefore.
       defaultSsl = (ssl is None and len(root_cert) == 0) or (ssl is True or len(root_cert) != 0)
       (h, p) = self._get_host_port(host, defaultSsl)
       self.host = h + ":" + p
       self.ssl = ssl is True or len(root_cert) != 0 or p == "8524"
-      self.rootCert = root_cert
+      self.root_cert = root_cert
       self.auth_token = auth_token
       self.auth_secret = auth_secret
-      if self.ssl or self.rootCert:
+      if self.ssl or self.root_cert:
         self.channel = self._create_secure_channel()
       else:
         self.channel = grpc.insecure_channel(self.host)
@@ -53,8 +53,8 @@ class NlpClient:
       callback([('token', self.auth_token), ('secret', self.auth_secret)], None)
 
     def _create_secure_channel(self):
-        if len(self.rootCert) != 0:
-          cert_creds = grpc.ssl_channel_credentials(root_certificates=self.rootCert)
+        if len(self.root_cert) != 0:
+          cert_creds = grpc.ssl_channel_credentials(root_certificates=self.root_cert)
         else:
           cert_creds = grpc.ssl_channel_credentials()
         auth_creds = grpc.metadata_call_credentials(self._metadata_callback)
