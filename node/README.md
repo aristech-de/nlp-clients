@@ -24,11 +24,12 @@ console.log(response)
 There are several examples in the `examples` directory:
 
 - [functions.ts](examples/models.ts): Demonstrates how to list the available functions.
+- [runFunctions.ts](examples/runFunctions.ts): Demonstrates how to perform NLP processing on a text.
 - [process.ts](examples/process.ts): Demonstrates how to perform NLP processing on a text.
 - [projects.ts](examples/projects.ts): Demonstrates how to list the available projects.
 - [intents.ts](examples/intents.ts): Demonstrates how to list intents for a project.
 - [scoreLimits.ts](examples/scoreLimits.ts): Demonstrates how to use score limits to figure out good thresholds for intents.
-- [content.ts](examples/content.ts): Demonstrates how to search content for a given prompt.
+- [content.ts](examples/content.ts): Demonstrates how to search content for a given prompt and read the streamed result list.
 
 You can run the examples directly using `tsx` like this:
 

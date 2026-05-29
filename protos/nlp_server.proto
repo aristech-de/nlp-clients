@@ -3,6 +3,7 @@
 syntax = "proto3";
 import "projects.proto";
 import "intents.proto";
+import "documents.proto";
 
 option java_multiple_files = true;
 option objc_class_prefix = "ATS";
@@ -81,6 +82,13 @@ service NLPServer {
   rpc SyncDBs(SyncDBsRequest) returns (SyncDBsResponse) {}
 
   rpc GetKeywords(GetKeywordsRequest) returns (stream GetKeywordsResponse) {}
+
+  rpc AddDocuments(AddDocumentsRequest) returns (AddDocumentsResponse) {}
+  rpc GetDocuments(GetDocumentsRequest) returns (GetDocumentsResponse) {}
+  rpc ProcessDocuments(ProcessDocumentsRequest) returns (ProcessDocumentsResponse) {}
+  rpc UpdateDocuments(UpdateDocumentsRequest) returns (UpdateDocumentsResponse) {}
+  rpc RemoveDocuments(RemoveDocumentsRequest) returns (RemoveDocumentsResponse) {}
+  rpc GetDocumentStatus(GetDocumentStatusRequest) returns (GetDocumentStatusResponse) {}
 }
 
 /**
@@ -102,6 +110,9 @@ message Function {
   string description = 3;
   // List of arguments accepted by the function.
   repeated string arguments = 4;
+  // bool that indicates if the function can process attachments
+  bool supports_attachments = 5;
+  repeated ContentType supported_content_types = 6;
 }
 
 
@@ -115,7 +126,23 @@ message RunFunctionsRequest {
   string input = 2;
   // Additional parameters for the functions.
   repeated string arguments = 3;
+  // Optional attachments for additional data (e.g. images, files).
+  repeated Attachment attachments = 4;
 }
+
+message Attachment {
+  // A unique identifier or filename for the attachment.
+  string name = 1;
+
+  // MIME type (e.g. "image/png", "application/pdf").
+  ContentType content_type = 2;
+
+  // Raw binary data of the attachment.
+  bytes data = 3;
+}
+
+
+
 
 
 /**

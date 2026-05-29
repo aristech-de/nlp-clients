@@ -14,18 +14,21 @@ const client = new NlpClient({
 })
 
 // Get matching content from the vector database
-const response = await client.getContent({
+const responses = await client.getContent({
   prompt: process.argv[2] || 'What are the lottery numbers?',
   threshold: 0.5,
   numResults: 3,
   projectId: process.env.PROJECT_ID,
 })
-console.log(util.inspect(response, { depth: null, colors: true }))
+
+for (const item of responses) {
+  console.log(util.inspect(item, { depth: null, colors: true }))
+}
 
 // Update content inside the vector database
 /*
 const updateResponse = await client.updateContent({
-  intent: [{
+  intents: [{
     id: '123',
     topic: 'lottery-numbers',
     projectId: process.env.PROJECT_ID,
