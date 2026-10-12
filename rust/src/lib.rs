@@ -13,10 +13,16 @@ use std::error::Error;
 
 use nlp_service::nlp_server_client::NlpServerClient;
 use nlp_service::{
-    Function, FunctionRequest, GetContentRequest, GetContentResponse, GetIntentsRequest,
-    GetProjectsRequest, GetScoreLimitsRequest, GetScoreLimitsResponse, Project,
-    RemoveContentRequest, RemoveContentResponse, RunFunctionsRequest, RunFunctionsResponse,
-    UpdateContentRequest, UpdateContentResponse,
+    AddDocumentsRequest, AddDocumentsResponse, AddProjectRequest, AddProjectResponse,
+    EmbeddingModel, Function, FunctionRequest, GetContentRequest, GetContentResponse,
+    GetDocumentStatusRequest, GetDocumentStatusResponse, GetDocumentsRequest, GetDocumentsResponse,
+    GetEmbeddingModelsRequest, GetIntentsRequest, GetKeywordsRequest, GetKeywordsResponse,
+    GetProjectsRequest, GetScoreLimitsRequest, GetScoreLimitsResponse, ProcessDocumentsRequest,
+    ProcessDocumentsResponse, Project, RemoveContentRequest, RemoveContentResponse,
+    RemoveDocumentsRequest, RemoveDocumentsResponse, RemoveProjectRequest, RemoveProjectResponse,
+    RunFunctionsRequest, RunFunctionsResponse, SyncDBsRequest, SyncDBsResponse,
+    UpdateContentRequest, UpdateContentResponse, UpdateDocumentsRequest, UpdateDocumentsResponse,
+    UpdateProjectRequest, UpdateProjectResponse,
 };
 use tonic::codegen::InterceptedService;
 use tonic::service::Interceptor;
@@ -111,7 +117,7 @@ fn error_chain(e: &dyn std::error::Error) -> String {
 /// Creates a new [NlpClient] to communicate with the server.
 ///
 /// # Arguments
-/// * `host` - The host to connect to (might include the port number e.g. "https://nlp.example.com:8524"). Note that the protocol must be included in the host.
+/// * `host` - The host to connect to (might include the port number e.g. `"https://nlp.example.com:8524"`). Note that the protocol must be included in the host.
 /// * `tls_options` - The tls options to use when connecting to the server. If None is given, the connection will be unencrypted and unauthenticated (the server must also be configured to communicate without encryption in this case).
 pub async fn get_client(
     host: String,
@@ -193,6 +199,103 @@ pub async fn list_functions(
     Ok(functions)
 }
 
+/// Gets the embedding models available on the server.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+/// * `request` - The request to send to the server. If None is given, the default request will be used.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{get_client, list_embedding_models, nlp_service::GetEmbeddingModelsRequest, TlsOptions};
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let models = list_embedding_models(&mut client, Some(GetEmbeddingModelsRequest {})).await?;
+///     for model in models {
+///         println!("{:?}", model);
+///     }
+///     Ok(())
+/// }
+/// ```
+pub async fn list_embedding_models(
+    client: &mut NlpClient,
+    request: Option<GetEmbeddingModelsRequest>,
+) -> Result<Vec<EmbeddingModel>, Box<dyn Error>> {
+    let req = request.unwrap_or_default();
+    let response = client.get_embedding_models(req).await?;
+    let mut stream = response.into_inner();
+    let mut models = vec![];
+    while let Some(model) = stream.message().await? {
+        models.push(model);
+    }
+    Ok(models)
+}
+
+/// Triggers a database synchronization on the server.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{get_client, sync_dbs, TlsOptions};
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let response = sync_dbs(&mut client).await?;
+///     println!("{}", response.status);
+///     Ok(())
+/// }
+/// ```
+pub async fn sync_dbs(client: &mut NlpClient) -> Result<SyncDBsResponse, Box<dyn Error>> {
+    let response = client.sync_d_bs(SyncDBsRequest {}).await?;
+    Ok(response.into_inner())
+}
+
+/// Gets the keywords for a project.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+/// * `request` - The request to send to the server.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{get_client, get_keywords, nlp_service::GetKeywordsRequest, TlsOptions};
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let keywords = get_keywords(&mut client, GetKeywordsRequest {
+///         project_id: "project-id".to_string(),
+///     }).await?;
+///     for keyword in keywords {
+///         println!("{:?}", keyword);
+///     }
+///     Ok(())
+/// }
+/// ```
+pub async fn get_keywords(
+    client: &mut NlpClient,
+    request: GetKeywordsRequest,
+) -> Result<Vec<GetKeywordsResponse>, Box<dyn Error>> {
+    let response = client.get_keywords(request).await?;
+    let mut stream = response.into_inner();
+    let mut keywords = vec![];
+    while let Some(keyword) = stream.message().await? {
+        keywords.push(keyword);
+    }
+    Ok(keywords)
+}
+
 /// Processes the given text with the specified function pipeline.
 ///
 /// # Arguments
@@ -202,23 +305,27 @@ pub async fn list_functions(
 /// # Example
 ///
 /// ```no_run
-/// use aristech_nlp_client::{get_client, process, TlsOptions};
+/// use aristech_nlp_client::{
+///     get_client, run_functions, TlsOptions,
+///     nlp_service::{Function, RunFunctionsRequest},
+/// };
 /// use std::error::Error;
 ///
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn Error>> {
 ///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
-///     let request = ProcessRawRequest {
+///     let request = RunFunctionsRequest {
 ///         input: "Hello, world!".to_string(),
 ///         functions: vec![
 ///             Function { id: "spellcheck-de".to_string(), ..Function::default() },
 ///         ],
-///        ..ProcessRawRequest::default()
+///        ..RunFunctionsRequest::default()
 ///     };
 ///     let response = run_functions(&mut client, request).await?;
 ///     println!("{}", response.output);
 ///     Ok(())
 /// }
+/// ```
 pub async fn run_functions(
     client: &mut NlpClient,
     request: RunFunctionsRequest,
@@ -272,13 +379,15 @@ pub async fn list_projects(
 /// # Example
 ///
 /// ```no_run
-/// use aristech_nlp_client::{get_client, get_intents, TlsOptions};
+/// use aristech_nlp_client::{get_client, get_intents, TlsOptions, nlp_service::GetIntentsRequest};
 /// use std::error::Error;
 ///
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn Error>> {
 ///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
-///     let intents = get_intents(&mut client, None).await?;
+///     let intents = get_intents(&mut client, GetIntentsRequest {
+///         project_id: "project-id".to_string(),
+///     }).await?;
 ///     for intent in intents {
 ///         println!("{:?}", intent);
 ///     }
@@ -307,14 +416,14 @@ pub async fn get_intents(
 /// # Example
 ///
 /// ```no_run
-/// use aristech_nlp_client::{get_client, get_score_limits, TlsOptions};
+/// use aristech_nlp_client::{get_client, get_score_limits, TlsOptions, nlp_service::GetScoreLimitsRequest};
 /// use std::error::Error;
 ///
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn Error>> {
 ///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
 ///     let request = GetScoreLimitsRequest {
-///         input: "Hello, world!".to_string(),
+///         project_id: "project-id".to_string(),
 ///         ..GetScoreLimitsRequest::default()
 ///     };
 ///     let response = get_score_limits(&mut client, request).await?;
@@ -339,7 +448,7 @@ pub async fn get_score_limits(
 /// # Example
 ///
 /// ```no_run
-/// use aristech_nlp_client::{get_client, get_content, TlsOptions};
+/// use aristech_nlp_client::{get_client, get_content, TlsOptions, nlp_service::GetContentRequest};
 /// use std::error::Error;
 ///
 /// #[tokio::main]
@@ -347,14 +456,9 @@ pub async fn get_score_limits(
 ///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
 ///     let request = GetContentRequest {
 ///         prompt: "What are the lottery numbers?".to_string(),
-///         threshold: 0.5,
-///         return_payload: true,
+///         threshold: Some(0.5),
 ///         num_results: 3,
-///         metadata: Some(ContentMetaData {
-///             project_id: "3f6959e6-cfb5-4eed-8195-033d47b73263".to_string(),
-///             exclude_output_from_search: true,
-///             ..ContentMetaData::default()
-///         }),
+///         project_id: "project-id".to_string(),
 ///         ..GetContentRequest::default()
 ///     };
 ///     let responses = get_content(&mut client, request).await?;
@@ -386,31 +490,26 @@ pub async fn get_content(
 /// # Example
 ///
 /// ```no_run
-/// use aristech_nlp_client::{get_client, update_content, TlsOptions, UpdateContentRequest, ContentMetaData, ContentData, DescriptionMapping, Output, OutputType};
+/// use aristech_nlp_client::{
+///     get_client, update_content, TlsOptions,
+///     nlp_service::{Intent, IntentInput, UpdateContentRequest},
+/// };
 /// use std::error::Error;
 ///
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn Error>> {
 ///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
 ///     let request = UpdateContentRequest {
-///         id: "123".to_string(),
-///         metadata: Some(ContentMetaData {
-///             project_id: "456".to_string(),
-///             ..ContentMetaData::default()
-///         }),
-///         content: Some(ContentData {
+///         intents: vec![Intent {
+///             id: "123".to_string(),
+///             project_id: "project-id".to_string(),
 ///             topic: "lottery".to_string(),
-///             description_mappings: vec![DescriptionMapping {
+///             inputs: vec![IntentInput {
 ///                 uuid: "82a2133e-038e-4c83-aa26-de47ed386c55".to_string(),
-///                 description: "What are the lottery numbers?".to_string(),
-///                 ..DescriptionMapping::default()
+///                 input: "What are the lottery numbers?".to_string(),
 ///             }],
-///             output: vec![Output {
-///                 r#type: OutputType::Chat.into(),
-///                 data: "The latest lottery numbers are {{lotto_numbers}}".into(),
-///             }],
-///             ..ContentData::default()
-///         }),
+///             ..Intent::default()
+///         }],
 ///     };
 ///     let response = update_content(&mut client, request).await?;
 ///     println!("{:?}", response);
@@ -434,18 +533,15 @@ pub async fn update_content(
 /// # Example
 ///
 /// ```no_run
-/// use aristech_nlp_client::{get_client, remove_content, TlsOptions, RemoveContentRequest, ContentMetaData};
+/// use aristech_nlp_client::{get_client, remove_content, TlsOptions, nlp_service::RemoveContentRequest};
 /// use std::error::Error;
 ///
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn Error>> {
 ///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
 ///     let request = RemoveContentRequest {
-///         id: "123".to_string(),
-///         metadata: Some(ContentMetaData {
-///             project_id: "456".to_string(),
-///             ..ContentMetaData::default()
-///         }),
+///         id: vec!["123".to_string()],
+///         project_id: "project-id".to_string(),
 ///         ..RemoveContentRequest::default()
 ///     };
 ///     let response = remove_content(&mut client, request).await?;
@@ -458,5 +554,318 @@ pub async fn remove_content(
     request: RemoveContentRequest,
 ) -> Result<RemoveContentResponse, Box<dyn Error>> {
     let response = client.remove_content(request).await?;
+    Ok(response.into_inner())
+}
+
+/// Adds a project to the server.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+/// * `request` - The request to send to the server.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{add_project, get_client, nlp_service::AddProjectRequest, TlsOptions};
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let response = add_project(&mut client, AddProjectRequest {
+///         name: "Example Project".to_string(),
+///         description: "Project created by the Rust example.".to_string(),
+///         ..AddProjectRequest::default()
+///     }).await?;
+///     println!("{:?}", response);
+///     Ok(())
+/// }
+/// ```
+pub async fn add_project(
+    client: &mut NlpClient,
+    request: AddProjectRequest,
+) -> Result<AddProjectResponse, Box<dyn Error>> {
+    let response = client.add_project(request).await?;
+    Ok(response.into_inner())
+}
+
+/// Updates a project on the server.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+/// * `request` - The request to send to the server.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{get_client, nlp_service::UpdateProjectRequest, update_project, TlsOptions};
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let response = update_project(&mut client, UpdateProjectRequest {
+///         project_id: "project-id".to_string(),
+///         name: "Updated Example Project".to_string(),
+///         description: "Project updated by the Rust example.".to_string(),
+///         ..UpdateProjectRequest::default()
+///     }).await?;
+///     println!("{:?}", response);
+///     Ok(())
+/// }
+/// ```
+pub async fn update_project(
+    client: &mut NlpClient,
+    request: UpdateProjectRequest,
+) -> Result<UpdateProjectResponse, Box<dyn Error>> {
+    let response = client.update_project(request).await?;
+    Ok(response.into_inner())
+}
+
+/// Removes a project from the server.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+/// * `request` - The request to send to the server.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{get_client, nlp_service::RemoveProjectRequest, remove_project, TlsOptions};
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let response = remove_project(&mut client, RemoveProjectRequest {
+///         project_id: "project-id".to_string(),
+///     }).await?;
+///     println!("{:?}", response);
+///     Ok(())
+/// }
+/// ```
+pub async fn remove_project(
+    client: &mut NlpClient,
+    request: RemoveProjectRequest,
+) -> Result<RemoveProjectResponse, Box<dyn Error>> {
+    let response = client.remove_project(request).await?;
+    Ok(response.into_inner())
+}
+
+/// Adds documents to a project.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+/// * `request` - The request to send to the server.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{
+///     add_documents, get_client,
+///     nlp_service::{AddDocumentsRequest, ContentType, Document},
+///     TlsOptions,
+/// };
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let response = add_documents(&mut client, AddDocumentsRequest {
+///         project_id: "project-id".to_string(),
+///         creator_id: "creator-id".to_string(),
+///         documents: vec![Document {
+///             project_id: "project-id".to_string(),
+///             name: "Example Document".to_string(),
+///             filename: "example.txt".to_string(),
+///             description: "Document uploaded by the Rust example.".to_string(),
+///             content_type: ContentType::ApplicationTxt as i32,
+///             data: b"Hello from Rust.".to_vec(),
+///             ..Document::default()
+///         }],
+///         ..AddDocumentsRequest::default()
+///     }).await?;
+///     println!("{:?}", response);
+///     Ok(())
+/// }
+/// ```
+pub async fn add_documents(
+    client: &mut NlpClient,
+    request: AddDocumentsRequest,
+) -> Result<AddDocumentsResponse, Box<dyn Error>> {
+    let response = client.add_documents(request).await?;
+    Ok(response.into_inner())
+}
+
+/// Gets documents for a project.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+/// * `request` - The request to send to the server.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{get_client, get_documents, nlp_service::GetDocumentsRequest, TlsOptions};
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let response = get_documents(&mut client, GetDocumentsRequest {
+///         project_id: "project-id".to_string(),
+///         include_data: false,
+///         ..GetDocumentsRequest::default()
+///     }).await?;
+///     println!("{:?}", response);
+///     Ok(())
+/// }
+/// ```
+pub async fn get_documents(
+    client: &mut NlpClient,
+    request: GetDocumentsRequest,
+) -> Result<GetDocumentsResponse, Box<dyn Error>> {
+    let response = client.get_documents(request).await?;
+    Ok(response.into_inner())
+}
+
+/// Processes documents in a project.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+/// * `request` - The request to send to the server.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{get_client, nlp_service::ProcessDocumentsRequest, process_documents, TlsOptions};
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let response = process_documents(&mut client, ProcessDocumentsRequest {
+///         project_id: "project-id".to_string(),
+///         document_ids: vec!["document-id".to_string()],
+///         ..ProcessDocumentsRequest::default()
+///     }).await?;
+///     println!("{:?}", response);
+///     Ok(())
+/// }
+/// ```
+pub async fn process_documents(
+    client: &mut NlpClient,
+    request: ProcessDocumentsRequest,
+) -> Result<ProcessDocumentsResponse, Box<dyn Error>> {
+    let response = client.process_documents(request).await?;
+    Ok(response.into_inner())
+}
+
+/// Updates documents in a project.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+/// * `request` - The request to send to the server.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{
+///     get_client,
+///     nlp_service::{ContentType, Document, UpdateDocumentsRequest},
+///     update_documents,
+///     TlsOptions,
+/// };
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let response = update_documents(&mut client, UpdateDocumentsRequest {
+///         project_id: "project-id".to_string(),
+///         documents: vec![Document {
+///             id: "document-id".to_string(),
+///             project_id: "project-id".to_string(),
+///             name: "Updated Example Document".to_string(),
+///             filename: "example-updated.txt".to_string(),
+///             description: "Document updated by the Rust example.".to_string(),
+///             content_type: ContentType::ApplicationTxt as i32,
+///             data: b"Updated content from Rust.".to_vec(),
+///             ..Document::default()
+///         }],
+///         ..UpdateDocumentsRequest::default()
+///     }).await?;
+///     println!("{:?}", response);
+///     Ok(())
+/// }
+/// ```
+pub async fn update_documents(
+    client: &mut NlpClient,
+    request: UpdateDocumentsRequest,
+) -> Result<UpdateDocumentsResponse, Box<dyn Error>> {
+    let response = client.update_documents(request).await?;
+    Ok(response.into_inner())
+}
+
+/// Removes documents from a project.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+/// * `request` - The request to send to the server.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{get_client, nlp_service::RemoveDocumentsRequest, remove_documents, TlsOptions};
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let response = remove_documents(&mut client, RemoveDocumentsRequest {
+///         project_id: "project-id".to_string(),
+///         document_ids: vec!["document-id".to_string()],
+///         ..RemoveDocumentsRequest::default()
+///     }).await?;
+///     println!("{:?}", response);
+///     Ok(())
+/// }
+/// ```
+pub async fn remove_documents(
+    client: &mut NlpClient,
+    request: RemoveDocumentsRequest,
+) -> Result<RemoveDocumentsResponse, Box<dyn Error>> {
+    let response = client.remove_documents(request).await?;
+    Ok(response.into_inner())
+}
+
+/// Gets the processing status for documents in a project.
+///
+/// # Arguments
+/// * `client` - The client to use to communicate with the server.
+/// * `request` - The request to send to the server.
+///
+/// # Example
+///
+/// ```no_run
+/// use aristech_nlp_client::{get_client, get_document_status, nlp_service::GetDocumentStatusRequest, TlsOptions};
+/// use std::error::Error;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn Error>> {
+///     let mut client = get_client("https://nlp.example.com".to_string(), Some(TlsOptions::default())).await?;
+///     let response = get_document_status(&mut client, GetDocumentStatusRequest {
+///         project_id: "project-id".to_string(),
+///         document_ids: vec!["document-id".to_string()],
+///     }).await?;
+///     println!("{:?}", response);
+///     Ok(())
+/// }
+/// ```
+pub async fn get_document_status(
+    client: &mut NlpClient,
+    request: GetDocumentStatusRequest,
+) -> Result<GetDocumentStatusResponse, Box<dyn Error>> {
+    let response = client.get_document_status(request).await?;
     Ok(response.into_inner())
 }

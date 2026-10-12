@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use aristech_nlp_client::{Auth, TlsOptions};
+use aristech_nlp_client::{nlp_service::ContentType, Auth, TlsOptions};
 
 /// This function checks if token and secret or a root certificate are set in the environment
 /// variables and returns the TlsOptions accordingly.
@@ -44,4 +44,24 @@ pub fn get_tls_options() -> Result<Option<TlsOptions>, Box<dyn Error>> {
         }
     };
     Ok(tls_options)
+}
+
+/// Maps the file extension of the given path to the corresponding content type.
+#[allow(dead_code)]
+pub fn content_type_from_path(path: &std::path::Path) -> Result<ContentType, Box<dyn Error>> {
+    let extension = path
+        .extension()
+        .and_then(|e| e.to_str())
+        .map(|e| e.to_lowercase())
+        .unwrap_or_default();
+    match extension.as_str() {
+        "png" => Ok(ContentType::ImagePng),
+        "jpg" | "jpeg" => Ok(ContentType::ImageJpeg),
+        "webp" => Ok(ContentType::ImageWebp),
+        "md" => Ok(ContentType::ApplicationMd),
+        "txt" => Ok(ContentType::ApplicationTxt),
+        "pdf" => Ok(ContentType::ApplicationPdf),
+        "xlsx" => Ok(ContentType::ApplicationXlsx),
+        _ => Err(format!("Unsupported file type: {}", path.display()).into()),
+    }
 }

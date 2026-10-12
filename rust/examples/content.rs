@@ -44,7 +44,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let update_response = update_content(
         &mut client,
         UpdateContentRequest {
-            intent: vec![Intent {
+            intents: vec![Intent {
                 id: "123".to_string(),
                 project_id: std::env::var("PROJECT_ID")?,
                 topic: "lottery".to_string(),

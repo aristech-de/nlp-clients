@@ -1,5 +1,14 @@
 # Changelog
 
+## Rust v3.2.0 - 2026-10-12
+- Added `add_project`, `update_project` and `remove_project`.
+- Added `list_embedding_models`, `get_keywords` and `sync_dbs`.
+- Added support for documents: `add_documents`, `get_documents`, `process_documents`, `update_documents`, `remove_documents` and `get_document_status`.
+- Added examples for all new functions, a `document_workflow` example that uploads a file and waits until it is processed and a `run_functions_attachments` example that sends a file as attachment.
+- The `remove_project` example reads the project to delete from `REMOVE_PROJECT_ID` so it can't accidentally remove the project from `PROJECT_ID`.
+- Fixed the example targets in `Cargo.toml` (`process` pointed to a file that doesn't exist) and renamed the examples `runFunctions` and `scoreLimits` to `run_functions` and `score_limits`.
+- Fixed the usage example in the README and the `content` example (`UpdateContentRequest.intents`).
+
 ## Rust v3.1.0 - 2026-05-29
 - Updated dependencies.
 - `get_client` now walks through potential errors to provide more helpful error messages when the client cannot be created.
