@@ -57,6 +57,7 @@ import fs from 'fs'
 export * as NlpServer from './generated/nlp_server.js'
 export * as Projects from './generated/projects.js'
 export * as Intents from './generated/intents.js'
+export * as Documents from './generated/documents.js'
 
 export interface ConnectionOptions {
   /**
