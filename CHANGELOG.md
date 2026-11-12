@@ -1,5 +1,19 @@
 # Changelog
 
+## Rust v3.2.1 - 2026-11-12
+- Updated dependencies.
+## NodeJS v3.1.0 - 2026-11-12
+- The document types are now exported as `Documents`, like `Projects` and `Intents`. Added a `documents` example.
+- Updated dependencies. `@grpc/grpc-js` 1.14.7 fixes four high-severity security advisories.
+- The package is now built with TypeScript 7.
+## Python v2.2.0 - 2026-11-12
+- Added `add_documents`, `get_documents`, `process_documents`, `update_documents`, `remove_documents` and `get_document_status`, plus a `documents` example. The document types can be imported from `aristech_nlp_client`.
+- Regenerated the protobuf code, which was missing the document messages and the new `Intent.document_id` field.
+- `list_embedding_models` called `RemoveContent` instead of `GetEmbeddingModels`. It now lists the embedding models, and the request argument can be left out.
+- `from aristech_nlp_client import *` failed because `__all__` still listed `ContentMetaData`, `ContentData`, `DescriptionMapping` and `Output`, which no longer exist. They were removed from `__all__`.
+- Fixed the minimum `protobuf` version (now 5.28.1). The generated code needs it, so installs with older versions failed on import.
+- Allow protobuf 7.
+
 ## Rust v3.2.0 - 2026-10-12
 - Added `add_project`, `update_project` and `remove_project`.
 - Added `list_embedding_models`, `get_keywords` and `sync_dbs`.
