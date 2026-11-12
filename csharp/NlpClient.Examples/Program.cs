@@ -27,8 +27,10 @@ internal class Program
       await Process(client);
     else if (args.Length > 0 && args[0] == "Projects")
       await Projects(client);
+    else if (args.Length > 0 && args[0] == "Documents")
+      await Documents(client, args.Length > 1 ? args[1] : null);
     else
-      System.Console.WriteLine("Usage: dotnet run GetContent|...");
+      System.Console.WriteLine("Usage: dotnet run GetContent|GetFunctions|GetIntents|Process|Projects|Documents [file]");
   }
 
   // GetContent example
@@ -41,7 +43,6 @@ internal class Program
       NumResults = 3,
       Threshold = 0.5f,
       ChatId = "",
-      OutputType = GetContentRequest.Types.OutputType.Chat,
     };
 
     var reply = client.GetContent(request);
@@ -112,5 +113,58 @@ internal class Program
 
     var reply = await client.GetScoreLimits(request);
     System.Console.WriteLine(reply);
+  }
+
+  // Documents example: adds the given file (if any) and lists the documents of the project
+  private static async Task Documents(NlpClient client, string? filePath)
+  {
+    var projectId = Environment.GetEnvironmentVariable("PROJECT_ID") ?? "";
+
+    if (filePath != null)
+    {
+      var contentType = Path.GetExtension(filePath).ToLowerInvariant() switch
+      {
+        ".pdf" => ContentType.ApplicationPdf,
+        ".md" => ContentType.ApplicationMd,
+        ".txt" => ContentType.ApplicationTxt,
+        ".xlsx" => ContentType.ApplicationXlsx,
+        ".png" => ContentType.ImagePng,
+        ".jpg" or ".jpeg" => ContentType.ImageJpeg,
+        ".webp" => ContentType.ImageWebp,
+        _ => throw new ArgumentException($"Unsupported file type: {filePath}"),
+      };
+      var fileName = Path.GetFileName(filePath);
+      var request = new AddDocumentsRequest
+      {
+        ProjectId = projectId,
+        // Split the document into intents right away
+        AutoProcess = true,
+      };
+      request.Documents.Add(new Document
+      {
+        Name = fileName,
+        Filename = fileName,
+        ContentType = contentType,
+        Data = Google.Protobuf.ByteString.CopyFrom(await File.ReadAllBytesAsync(filePath)),
+      });
+
+      var added = await client.AddDocumentsAsync(request);
+      foreach (var result in added.Results)
+      {
+        if (string.IsNullOrEmpty(result.Error))
+          System.Console.WriteLine($"Added document {result.DocumentId}");
+        else
+          System.Console.Error.WriteLine($"Failed to add document: {result.Error}");
+      }
+    }
+
+    // List the documents of the project with their processing status
+    var response = await client.GetDocumentsAsync(new GetDocumentsRequest { ProjectId = projectId });
+    System.Console.WriteLine($"{response.TotalCount} document(s):");
+    foreach (var document in response.Documents)
+    {
+      var status = document.ProcessingStatus?.Status.ToString() ?? "Unknown";
+      System.Console.WriteLine($"{document.Id} {document.Name} [{status}] {document.IntentIds.Count} intents");
+    }
   }
 }
