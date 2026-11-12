@@ -9,6 +9,7 @@ from .proto.projects_pb2_grpc import *
 from .proto.projects_pb2 import *
 from .proto.intents_pb2_grpc import *
 from .proto.intents_pb2 import *
+from .proto.documents_pb2 import *
 
 class NlpClient:
     host: str
@@ -101,18 +102,18 @@ class NlpClient:
         stub = NLPServerStub(self.channel)
         return stub.GetIntents(request)
     
-    def list_embedding_models(self, request=GetEmbeddingModelsRequest) -> Iterable[EmbeddingModel]:
+    def list_embedding_models(self, request=GetEmbeddingModelsRequest()) -> Iterable[EmbeddingModel]:
       """
-       Lists the available embedding models.
+      Lists the available embedding models.
 
       Args:
-        request (GetEmbeddingModelsRequest): The request to send.
+        request (GetEmbeddingModelsRequest): The request to send. Defaults to an empty request.
 
       Returns:
-        Iterable[EmbeddingModel]: The embedding models available. 
+        Iterable[EmbeddingModel]: The embedding models available.
       """
       stub = NLPServerStub(self.channel)
-      return stub.RemoveContent(request)
+      return stub.GetEmbeddingModels(request)
   
     def run_functions(self, request: RunFunctionsRequest) -> RunFunctionsResponse:
         """
@@ -217,7 +218,102 @@ class NlpClient:
         """
         stub = NLPServerStub(self.channel)
         return stub.AddProject(request)
-    
+
+    def add_documents(self, request: AddDocumentsRequest) -> AddDocumentsResponse:
+        """
+        Adds documents to a project.
+
+        The `data` field of each document must contain the raw file content.
+        If `auto_process` is set, the server splits the documents into intents
+        right away; otherwise call `process_documents` later.
+
+        Args:
+          request (AddDocumentsRequest): The request to send.
+
+        Returns:
+          AddDocumentsResponse: One result per document plus the number of
+          succeeded and failed documents.
+        """
+        stub = NLPServerStub(self.channel)
+        return stub.AddDocuments(request)
+
+    def get_documents(self, request: GetDocumentsRequest) -> GetDocumentsResponse:
+        """
+        Gets the documents of a project.
+
+        The raw document content is only included when `include_data` is set.
+        Use `limit` and `offset` for pagination; `total_count` in the response
+        holds the number of all matching documents.
+
+        Args:
+          request (GetDocumentsRequest): The request to send.
+
+        Returns:
+          GetDocumentsResponse: The documents and the total count.
+        """
+        stub = NLPServerStub(self.channel)
+        return stub.GetDocuments(request)
+
+    def process_documents(self, request: ProcessDocumentsRequest) -> ProcessDocumentsResponse:
+        """
+        Processes documents of a project into intents.
+
+        Args:
+          request (ProcessDocumentsRequest): The request to send.
+
+        Returns:
+          ProcessDocumentsResponse: One result per document with the created intents.
+        """
+        stub = NLPServerStub(self.channel)
+        return stub.ProcessDocuments(request)
+
+    def update_documents(self, request: UpdateDocumentsRequest) -> UpdateDocumentsResponse:
+        """
+        Updates documents of a project.
+
+        The `id` of each document is required. Only fill `data` if the
+        document content should be replaced.
+
+        Args:
+          request (UpdateDocumentsRequest): The request to send.
+
+        Returns:
+          UpdateDocumentsResponse: One result per document plus the number of
+          succeeded and failed documents.
+        """
+        stub = NLPServerStub(self.channel)
+        return stub.UpdateDocuments(request)
+
+    def remove_documents(self, request: RemoveDocumentsRequest) -> RemoveDocumentsResponse:
+        """
+        Removes documents from a project.
+
+        Set `cascade_delete` to also remove the intents that were created
+        from the documents.
+
+        Args:
+          request (RemoveDocumentsRequest): The request to send.
+
+        Returns:
+          RemoveDocumentsResponse: One result per document plus the number of
+          succeeded and failed documents.
+        """
+        stub = NLPServerStub(self.channel)
+        return stub.RemoveDocuments(request)
+
+    def get_document_status(self, request: GetDocumentStatusRequest) -> GetDocumentStatusResponse:
+        """
+        Gets the processing status of documents in a project.
+
+        Args:
+          request (GetDocumentStatusRequest): The request to send.
+
+        Returns:
+          GetDocumentStatusResponse: The processing status per document.
+        """
+        stub = NLPServerStub(self.channel)
+        return stub.GetDocumentStatus(request)
+
     def close(self):
       if hasattr(self, "channel"):
           self.channel.close()

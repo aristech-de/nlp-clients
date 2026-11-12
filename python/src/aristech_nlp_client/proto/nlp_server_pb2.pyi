@@ -5,6 +5,7 @@ Copyright Aristech GmbH"""
 
 import builtins
 import collections.abc
+from . import documents_pb2
 import google.protobuf.descriptor
 import google.protobuf.internal.containers
 import google.protobuf.message
@@ -39,16 +40,22 @@ class Function(google.protobuf.message.Message):
     NAME_FIELD_NUMBER: builtins.int
     DESCRIPTION_FIELD_NUMBER: builtins.int
     ARGUMENTS_FIELD_NUMBER: builtins.int
+    SUPPORTS_ATTACHMENTS_FIELD_NUMBER: builtins.int
+    SUPPORTED_CONTENT_TYPES_FIELD_NUMBER: builtins.int
     id: builtins.str
     """Unique identifier of the function."""
     name: builtins.str
     """Descriptive name of the function."""
     description: builtins.str
     """Detailed description of the function."""
+    supports_attachments: builtins.bool
+    """bool that indicates if the function can process attachments"""
     @property
     def arguments(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
         """List of arguments accepted by the function."""
 
+    @property
+    def supported_content_types(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[documents_pb2.ContentType.ValueType]: ...
     def __init__(
         self,
         *,
@@ -56,8 +63,10 @@ class Function(google.protobuf.message.Message):
         name: builtins.str = ...,
         description: builtins.str = ...,
         arguments: collections.abc.Iterable[builtins.str] | None = ...,
+        supports_attachments: builtins.bool = ...,
+        supported_content_types: collections.abc.Iterable[documents_pb2.ContentType.ValueType] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["arguments", b"arguments", "description", b"description", "id", b"id", "name", b"name"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["arguments", b"arguments", "description", b"description", "id", b"id", "name", b"name", "supported_content_types", b"supported_content_types", "supports_attachments", b"supports_attachments"]) -> None: ...
 
 global___Function = Function
 
@@ -72,6 +81,7 @@ class RunFunctionsRequest(google.protobuf.message.Message):
     FUNCTIONS_FIELD_NUMBER: builtins.int
     INPUT_FIELD_NUMBER: builtins.int
     ARGUMENTS_FIELD_NUMBER: builtins.int
+    ATTACHMENTS_FIELD_NUMBER: builtins.int
     input: builtins.str
     """The raw text to process."""
     @property
@@ -82,16 +92,45 @@ class RunFunctionsRequest(google.protobuf.message.Message):
     def arguments(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
         """Additional parameters for the functions."""
 
+    @property
+    def attachments(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Attachment]:
+        """Optional attachments for additional data (e.g. images, files)."""
+
     def __init__(
         self,
         *,
         functions: collections.abc.Iterable[global___Function] | None = ...,
         input: builtins.str = ...,
         arguments: collections.abc.Iterable[builtins.str] | None = ...,
+        attachments: collections.abc.Iterable[global___Attachment] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["arguments", b"arguments", "functions", b"functions", "input", b"input"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["arguments", b"arguments", "attachments", b"attachments", "functions", b"functions", "input", b"input"]) -> None: ...
 
 global___RunFunctionsRequest = RunFunctionsRequest
+
+@typing.final
+class Attachment(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    NAME_FIELD_NUMBER: builtins.int
+    CONTENT_TYPE_FIELD_NUMBER: builtins.int
+    DATA_FIELD_NUMBER: builtins.int
+    name: builtins.str
+    """A unique identifier or filename for the attachment."""
+    content_type: documents_pb2.ContentType.ValueType
+    """MIME type (e.g. "image/png", "application/pdf")."""
+    data: builtins.bytes
+    """Raw binary data of the attachment."""
+    def __init__(
+        self,
+        *,
+        name: builtins.str = ...,
+        content_type: documents_pb2.ContentType.ValueType = ...,
+        data: builtins.bytes = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["content_type", b"content_type", "data", b"data", "name", b"name"]) -> None: ...
+
+global___Attachment = Attachment
 
 @typing.final
 class RunFunctionsResponse(google.protobuf.message.Message):

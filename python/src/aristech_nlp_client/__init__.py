@@ -5,6 +5,7 @@ from .proto.projects_pb2_grpc import *
 from .proto.projects_pb2 import *
 from .proto.intents_pb2_grpc import *
 from .proto.intents_pb2 import *
+from .proto.documents_pb2 import *
 
 __all__ = [
   "NlpClient",
@@ -23,8 +24,19 @@ __all__ = [
   "UpdateContentResponse",
   "RemoveContentRequest",
   "RemoveContentResponse",
-  "ContentMetaData",
-  "ContentData",
-  "DescriptionMapping",
-  "Output",
+  "Document",
+  "ContentType",
+  "ProcessingStatus",
+  "AddDocumentsRequest",
+  "AddDocumentsResponse",
+  "GetDocumentsRequest",
+  "GetDocumentsResponse",
+  "ProcessDocumentsRequest",
+  "ProcessDocumentsResponse",
+  "UpdateDocumentsRequest",
+  "UpdateDocumentsResponse",
+  "RemoveDocumentsRequest",
+  "RemoveDocumentsResponse",
+  "GetDocumentStatusRequest",
+  "GetDocumentStatusResponse",
 ]

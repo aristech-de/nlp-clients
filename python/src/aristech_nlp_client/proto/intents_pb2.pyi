@@ -9,7 +9,7 @@ import google.protobuf.descriptor
 import google.protobuf.internal.containers
 import google.protobuf.internal.enum_type_wrapper
 import google.protobuf.message
-import projects_pb2
+from . import projects_pb2
 import sys
 import typing
 
@@ -103,6 +103,7 @@ class Intent(google.protobuf.message.Message):
     EXCLUDE_OUTPUT_FROM_SEARCH_FIELD_NUMBER: builtins.int
     KEYWORDS_FIELD_NUMBER: builtins.int
     CREATOR_ID_FIELD_NUMBER: builtins.int
+    DOCUMENT_ID_FIELD_NUMBER: builtins.int
     id: builtins.str
     """Unique ID of the intent."""
     project_id: builtins.str
@@ -117,6 +118,8 @@ class Intent(google.protobuf.message.Message):
     """If true, the output of this intent is excluded from search queries."""
     creator_id: builtins.str
     """ID of the creator of this intent."""
+    document_id: builtins.str
+    """Optional: ID of the document this intent was generated from."""
     @property
     def inputs(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___IntentInput]:
         """List of inputs (IntentInput) assigned to this intent."""
@@ -158,8 +161,9 @@ class Intent(google.protobuf.message.Message):
         exclude_output_from_search: builtins.bool = ...,
         keywords: collections.abc.Iterable[global___Keyword] | None = ...,
         creator_id: builtins.str = ...,
+        document_id: builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["creator_id", b"creator_id", "exclude_output_from_search", b"exclude_output_from_search", "id", b"id", "inputs", b"inputs", "keywords", b"keywords", "locale", b"locale", "output_chat", b"output_chat", "output_email", b"output_email", "output_voice", b"output_voice", "outputs", b"outputs", "project_id", b"project_id", "published", b"published", "related_to", b"related_to", "topic", b"topic"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["creator_id", b"creator_id", "document_id", b"document_id", "exclude_output_from_search", b"exclude_output_from_search", "id", b"id", "inputs", b"inputs", "keywords", b"keywords", "locale", b"locale", "output_chat", b"output_chat", "output_email", b"output_email", "output_voice", b"output_voice", "outputs", b"outputs", "project_id", b"project_id", "published", b"published", "related_to", b"related_to", "topic", b"topic"]) -> None: ...
 
 global___Intent = Intent
 
