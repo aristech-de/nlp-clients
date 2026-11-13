@@ -1,5 +1,8 @@
 # Changelog
 
+## Rust v3.3.0 - 2026-11-13
+- Connect timeout: `get_client_with_options` with `ConnectOptions::connect_timeout` limits how long connecting may take, including the TLS handshake. Exceeding it fails with the new `ConnectTimeoutError`. `get_client` keeps waiting without a limit as before.
+
 ## Rust v3.2.1 - 2026-11-12
 - Updated dependencies.
 ## NodeJS v3.1.0 - 2026-11-12
